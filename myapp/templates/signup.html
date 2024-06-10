@@ -1,0 +1,30 @@
+<!-- myapp/templates/signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <h2>Create New Account</h2>
+        </div>
+        <form method="post" action="">
+            {% csrf_token %}
+            <h4> {{form.username.label}} {{form.username}} </h4>
+            <h4> {{form.email.label}} {{form.email}} </h4>
+            <h4> {{form.user_type.label}} {{form.user_type}} </h4>
+            <h5> {{form.password1.label}} {{form.password1}} </h5>
+            <h5> {{form.password2.label}} {{form.password2}} </h5>
+            <div class="button-container">
+                <button type="button" onclick="window.location.href='{% url 'welcome' %}'">Back</button>
+                <button type="submit" onclick="window.location.href='{% url 'login' %}'">Confirm</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

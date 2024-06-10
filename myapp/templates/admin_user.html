@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Admin user</h2>
+        <div class="button-container">
+            <button onclick="window.location.href='{% url 'employee_hours' %}'">Assign Hours</button>
+            <button onclick="window.location.href='{% url 'signup' %}'">New Admin</button>
+            <button onclick="window.location.href='{% url 'calendar' %}'">Calendar</button>
+            <button onclick="window.location.href='{% url 'live_chat' %}'">Live Chat</button>
+        </div>
+        <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+    </div>
+</body>
+</html>
