@@ -1,4 +1,3 @@
-<!-- myapp/templates/signup.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,14 +16,21 @@
             {% csrf_token %}
             <h4> {{form.username.label}} {{form.username}} </h4>
             <h4> {{form.email.label}} {{form.email}} </h4>
-            <h4> {{form.user_type.label}} {{form.user_type}} </h4>
+            <h5> {{form.user_type.label}} {{form.user_type}} </h5>
             <h5> {{form.password1.label}} {{form.password1}} </h5>
             <h5> {{form.password2.label}} {{form.password2}} </h5>
             <div class="button-container">
-                <button type="button" onclick="window.location.href='{% url 'welcome' %}'">Back</button>
-                <button type="submit" onclick="window.location.href='{% url 'login' %}'">Confirm</button>
+                <button type="button" onclick="window.location.href='{% if user_type == 'admin' %}{% url 'admin_dashboard' %}{% else %}{% url 'welcome' %}{% endif %}'">Back</button>
+                <button type="submit">Confirm</button>
             </div>
         </form>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </body>
 </html>

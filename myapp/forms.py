@@ -1,5 +1,6 @@
 from django import forms
 from .models import CustomUser
+from django.contrib.auth.forms import UserCreationForm
 
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -8,6 +9,16 @@ class CustomUserCreationForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'user_type')
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user.is_authenticated and user.user_type == 'admin':
+                self.fields['user_type'].choices = CustomUser.USER_TYPE_CHOICES
+        else:
+            self.fields['user_type'].choices = [
+                choice for choice in CustomUser.USER_TYPE_CHOICES if choice[0] == 'normal'
+            ]
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -20,6 +31,11 @@ class CustomUserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+        if self.cleaned_data["user_type"] == "admin":
+            user.is_superuser = True
+            user.is_staff = True
+        if self.cleaned_data["user_type"] == "employee":
+            user.is_staff = True
         if commit:
             user.save()
         return user

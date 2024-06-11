@@ -3,27 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechTicket Login</title>
+    <title>Login</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
     <div class="container">
         <div class="box">
-            <h2>Enter account details</h2>
+            <h2>Login</h2>
         </div>
-        <form>
-            <div class="input-container">
-                <input type="text" placeholder="Username" required>
-            </div>
-            <div class="input-container">
-                <input type="password" placeholder="Password" required>
-            </div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
             <div class="button-container">
                 <button type="button" onclick="window.location.href='{% url 'welcome' %}'">Back</button>
-                <button type="button" onclick="window.location.href='{% url 'admin_user' %}'">Login</button>
+                <button type="submit">Login</button>
             </div>
         </form>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </body>
 </html>
