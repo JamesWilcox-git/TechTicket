@@ -48,13 +48,15 @@ def signup(request):
         form = CustomUserCreationForm(request.POST, user=request.user)
         if form.is_valid():
             user = form.save()
+            login(request, user)
             if user.user_type == 'admin':
                     return redirect('admin_dashboard')
             elif user.user_type == 'employee':
                 return redirect('employee_dashboard')
-            else:
+            elif user.user_type =='normal':
                 return redirect('normal_dashboard')
         else:
+            messages.error(request, "Error creating account. Please try again.")
             print("Form is not valid")
             print(form.errors)
     else:
