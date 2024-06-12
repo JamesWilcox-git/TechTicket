@@ -85,8 +85,10 @@ def calendar(request):
 
 # employee hours screen
 def employee_hours(request):
-    return render(request, 'employee_hours.html')
+    user_type = request.user.user_type
+    return render(request, 'employee_hours.html', {'user_type':user_type})
 
 # live chat screen
 def live_chat(request):
-    return render(request, 'live_chat.html')
+    user_type = request.user.user_type
+    return render(request, 'live_chat.html', {'user_type':user_type})

@@ -13,7 +13,7 @@
             <h1>Live Chat</h1>
             <h2>Lowest priority</h2>
         </div>
-        <button class="back-button" onclick="window.location.href='{% url 'admin_dashboard' %}'">Back</button>
+        <button class="back-button" onclick="window.location.href='{% if user_type == 'admin' %}{% url 'admin_dashboard' %}{% elif user_type == 'employee' %}{% url 'employee_dashboard' %}{% else %}{% url 'normal_dashboard' %}{% endif %}'">Back</button>
     </div>
 </body>
 </html>
