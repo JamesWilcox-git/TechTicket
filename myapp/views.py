@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
 from django.contrib import messages
+from .forms import CustomUserCreationForm, TicketForm
 import traceback
 
 # welcome/home screen
@@ -50,10 +51,10 @@ def signup(request):
             user = form.save()
             login(request, user)
             if user.user_type == 'admin':
-                    return redirect('admin_dashboard')
+                return redirect('admin_dashboard')
             elif user.user_type == 'employee':
                 return redirect('employee_dashboard')
-            elif user.user_type =='normal':
+            elif user.user_type == 'normal':
                 return redirect('normal_dashboard')
         else:
             messages.error(request, "Error creating account. Please try again.")
@@ -61,23 +62,23 @@ def signup(request):
             print(form.errors)
     else:
         form = CustomUserCreationForm(user=request.user)
-    
-    return render(request, 'signup.html', {'form': form, 'user_type':user_type})
+
+    return render(request, 'signup.html', {'form': form, 'user_type': user_type})
 
 # admin_dashboard home screen
 def admin_dashboard(request):
     username = request.user.username
-    return render(request, 'admin_dashboard.html', {'username':username})
+    return render(request, 'admin_dashboard.html', {'username': username})
 
 # employee_dashboard home screen
 def employee_dashboard(request):
     username = request.user.username
-    return render(request, 'employee_dashboard.html', {'username':username})
+    return render(request, 'employee_dashboard.html', {'username': username})
 
 # normal_dashboard home screen
 def normal_dashboard(request):
     username = request.user.username
-    return render(request, 'normal_dashboard.html', {'username':username})
+    return render(request, 'normal_dashboard.html', {'username': username})
 
 # calendar screen
 def calendar(request):
@@ -86,9 +87,25 @@ def calendar(request):
 # employee hours screen
 def employee_hours(request):
     user_type = request.user.user_type
-    return render(request, 'employee_hours.html', {'user_type':user_type})
+    return render(request, 'employee_hours.html', {'user_type': user_type})
 
 # live chat screen
 def live_chat(request):
     user_type = request.user.user_type
-    return render(request, 'live_chat.html', {'user_type':user_type})
+    return render(request, 'live_chat.html', {'user_type': user_type})
+
+# ticket request screen
+def ticket_request(request):
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            description = form.cleaned_data['description']
+            # You can process the form data here (e.g., send an email, log to file, etc.)
+            messages.success(request, 'Ticket submitted successfully!')
+            return redirect('normal_dashboard')
+        else:
+            messages.error(request, 'Error submitting ticket. Please try again.')
+    else:
+        form = TicketForm()
+    return render(request, 'ticket_request.html', {'form': form})
