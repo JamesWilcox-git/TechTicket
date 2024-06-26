@@ -36,3 +36,13 @@ should have at least 100 items. There can be exceptions based on the specific pr
 login, logout.
 
 ● Consideration for design aesthetics
+
+# Running TechTicket
+●Download the zipped files, and open them in Visual Studio Code 
+
+●Open a terminal in Visual Studio Code run the following commands:
+  - python3 -m venv myenv
+  - source myenv/bin/activate
+  - python3 manage.py runserver
+
+
