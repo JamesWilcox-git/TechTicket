@@ -6,15 +6,70 @@
     <title>TechTicket Welcome</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .starfield {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Ensures stars are behind everything */
+        }
+        .stars {
+            position: absolute;
+            width: 1em;
+            height: 1em;
+            color: white;
+            font-size: 60px; /* Size of the '+' symbol */
+            animation: moveStars 10s linear infinite;
+        }
+        @keyframes moveStars {
+            from {
+                top: -50px;
+            }
+            to {
+                top: 100%;
+            }
+        }
+        /* Individual star positioning and delays */
+        .stars:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .stars:nth-child(2) { left: 15%; animation-delay: -1s; }
+        .stars:nth-child(3) { left: 25%; animation-delay: -2s; }
+        .stars:nth-child(4) { left: 35%; animation-delay: -3s; }
+        .stars:nth-child(5) { left: 45%; animation-delay: -4s; }
+        .stars:nth-child(6) { left: 55%; animation-delay: -5s; }
+        .stars:nth-child(7) { left: 65%; animation-delay: -6s; }
+        .stars:nth-child(8) { left: 75%; animation-delay: -7s; }
+        .stars:nth-child(9) { left: 85%; animation-delay: -8s; }
+        .stars:nth-child(10) { left: 95%; animation-delay: -9s; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="box">
+    <div class="starfield">
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+        <div class="stars">+</div>
+    </div>
+    <img src="{% static 'TechTicket.png' %}" style="position: relative; z-index: 1;">
+
+    <div class="container" style="position: relative; z-index: 1;">
+        <div class="header">
             <h2>Welcome to TechTicket™</h2>
         </div>
         <div class="button-container">
-            <button onclick="window.location.href='{% url 'login' %}'">Login</button>
-            <button onclick="window.location.href='{% url 'signup' %}'">Signup</button>
+            <button class="btn" onclick="window.location.href='{% url 'login' %}'">Login</button>
+            <button class="btn" onclick="window.location.href='{% url 'signup' %}'">Signup</button>
         </div>
     </div>
 </body>

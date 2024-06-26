@@ -1,12 +1,4 @@
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f5f5f5;
-}
+
 
 .container {
     text-align: center;
@@ -24,11 +16,6 @@ body {
     margin-bottom: 20px;
 }
 
-h2 {
-    margin: 0;
-    color: #721c24;
-}
-
 .button-container {
     display: flex;
     justify-content: space-around;
@@ -42,10 +29,6 @@ button {
     padding: 10px 20px;
     color: #155724;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #c3e6cb;
 }
 
 .input-container {
@@ -59,23 +42,26 @@ input[type="text"], input[type="password"] {
     border-radius: 5px;
 }
 
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     margin: 0;
-    background-color: #f5f5f5;
+    padding: 0;
 }
 
 .container {
-    text-align: center;
-    border: 1px solid #ccc;
+    background: rgba(0, 0, 0, 0.6);
     padding: 20px;
     border-radius: 10px;
-    background-color: #d4edda;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
+
 
 .box {
     background-color: #f8d7da;
@@ -87,7 +73,9 @@ body {
 
 h2 {
     margin: 0;
-    color: #721c24;
+    color: #ffffff;
+    outline: #05a;
+    outline-width: 5px;
 }
 
 .button-container {
@@ -97,16 +85,20 @@ h2 {
 }
 
 button {
-    background-color: #d4edda;
     border: 1px solid #c3e6cb;
-    border-radius: 5px;
+    outline: none;
     padding: 10px 20px;
-    color: #155724;
+    border-radius: 5px;
+    background: #08d;
+    color: white;
+    font-size: 1rem;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-button:hover {
-    background-color: #c3e6cb;
+
+.button:hover {
+    background: #05a;
 }
 
 .calendar-grid {
