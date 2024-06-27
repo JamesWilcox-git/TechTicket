@@ -1,6 +1,5 @@
 from django import forms
 from .models import CustomUser
-from django.contrib.auth.forms import UserCreationForm
 
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -14,14 +13,13 @@ class CustomUserCreationForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         if user.is_authenticated and user.user_type == 'admin':
-                self.fields['user_type'].choices = CustomUser.USER_TYPE_CHOICES
+            self.fields['user_type'].choices = CustomUser.USER_TYPE_CHOICES
         else:
             self.fields['user_type'].choices = [
                 choice for choice in CustomUser.USER_TYPE_CHOICES if choice[0] == 'normal'
             ]
 
     def clean_password2(self):
-        # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
@@ -39,3 +37,13 @@ class CustomUserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+class TicketForm(forms.Form):
+    CATEGORY_CHOICES = [
+        ('repair', 'Repair Request'),
+        ('account', 'Account Help'),
+    ]
+
+    category = forms.ChoiceField(choices=CATEGORY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+

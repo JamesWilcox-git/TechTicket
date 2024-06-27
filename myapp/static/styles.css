@@ -1,6 +1,6 @@
 .container {
     text-align: center;
-    border: 1px solid #ccc;
+    border: 1px solid #2f0747;
     padding: 20px;
     border-radius: 10px;
     background-color: #fff;
@@ -73,6 +73,7 @@ h2 {
     color: #ffffff;
     outline: #05a;
     outline-width: 5px;
+    text-align: center;
 }
 
 .button-container {
@@ -82,7 +83,7 @@ h2 {
 }
 
 button {
-    border: 1px solid #c3e6cb;
+    border: 1px solid #c3c4e6;
     outline: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -118,13 +119,66 @@ button {
 .back-button, .logout-button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #c3e6cb;
-    border: 1px solid #a3c6ab;
+    background-color: #2f0747;
+    border: 1px solid #2f0747;
     border-radius: 5px;
-    color: #155724;
+    color: white;
     cursor: pointer;
 }
 
 .back-button:hover, .logout-button:hover {
-    background-color: #a3c6ab;
+    background-color: #1b0429;
+}
+
+.tickets {
+    background-color: #2575fc;
+    border: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+}
+.tickets p {
+    margin: 5px 0;
+}
+
+.ticket-container {
+    width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.ticket-button-resolved {
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: #1e6439;
+    border: 1px solid #1e6439;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.ticket-button-resolved:hover{
+    background-color: #0d2a18;
+    border: 1px solid #0d2a18;
+    border-radius: 5px;
+}
+
+.ticket-button-not-resolved {
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: #d02b1f;
+    border: 1px solid #d02b1f;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.ticket-button-not-resolved:hover {
+    background-color: #591611;
+    border: 1px solid #591611;
+    border-radius: 5px;
 }

@@ -38,11 +38,13 @@ login, logout.
 ● Consideration for design aesthetics
 
 # Running TechTicket
-●Download the zipped files, and open them in Visual Studio Code 
+● Download the zipped files, and open them in Visual Studio Code
 
-●Open a terminal in Visual Studio Code run the following commands:
-  - python3 -m venv myenv
-  - source myenv/bin/activate
-  - python3 manage.py runserver
+● Open a terminal in Visual Studio Code run the following commands:
 
-
+- python3 -m venv myenv
+- source myenv/bin/activate
+- pip3 install Django
+- python3 manage.py runserver
+- The terminal will say Starting development server at http://127.0.0.1:8000/
+- Copy the link and paste it into Safari (Chrome appears to have issues with colors)
