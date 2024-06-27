@@ -7,26 +7,10 @@
 }
 
 .box {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
+    background-color: #2f0747;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 20px;
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-button {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    border-radius: 5px;
-    padding: 10px 20px;
-    color: #155724;
-    cursor: pointer;
 }
 
 .input-container {
@@ -57,15 +41,6 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-
-.box {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 20px;
 }
 
 h2 {
@@ -131,7 +106,7 @@ button {
 }
 
 .tickets {
-    background-color: #2575fc;
+    background-color: #2f0747;
     border: white;
     margin: 10px 0;
     padding: 10px;
