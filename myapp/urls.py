@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('chat/<str:room_name>/', views.chat, name='chat'),
     path('', views.welcome, name='welcome'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),

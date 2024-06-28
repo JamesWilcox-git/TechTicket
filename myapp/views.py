@@ -140,3 +140,9 @@ def ticket_request(request):
     else:
         form = TicketForm()
     return render(request, 'ticket_request.html', {'form': form})
+
+def chat(request, room_name):
+    #user_type = request.user.user_type
+    return render(request, 'chat.html', {
+        'room_name': room_name
+    })

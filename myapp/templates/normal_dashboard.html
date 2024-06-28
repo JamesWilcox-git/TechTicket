@@ -12,7 +12,7 @@
         <h2> Hello, {{ username }}</h2>
         <div class="button-container">
             <button onclick="window.location.href='{% url 'ticket_request' %}'">Submit Ticket</button>
-            <button onclick="window.location.href='{% url 'live_chat' %}'">Live Chat</button>
+            <button onclick="window.location.href='{% url 'chat' room_name='room_name' %}'">Live Chat</button>
             <button onclick="window.location.href='{% url 'normal_dashboard' %}'">View Tickets</button>
         </div>
         <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
