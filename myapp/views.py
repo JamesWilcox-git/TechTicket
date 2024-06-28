@@ -65,32 +65,56 @@ def signup(request):
 
     return render(request, 'signup.html', {'form': form, 'user_type': user_type})
 
-# admin_dashboard home screen
+@login_required # only logged in users should access this
 def admin_dashboard(request):
+     # only admin users can access this view
+    if request.user.user_type != 'admin':
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login')
     username = request.user.username
     return render(request, 'admin_dashboard.html', {'username': username})
 
-# employee_dashboard home screen
+@login_required # only logged in users should access this
 def employee_dashboard(request):
+     # only employee users can access this view
+    if request.user.user_type != 'employee':
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login')
     username = request.user.username
     return render(request, 'employee_dashboard.html', {'username': username})
 
-# employee assigned tickets screen
+@login_required # only logged in users should access this
 def view_assigned_tickets(request):
+    # only employee users can access this view
+    if request.user.user_type != 'employee':
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login')
     username = request.user.username
     return render(request, 'view_assigned_tickets.html', {'username': username})
 
-# normal_dashboard home screen
+@login_required # only logged in users should access this
 def normal_dashboard(request):
+    # only normal users can access this view
+    if request.user.user_type != 'normal':
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login')
     username = request.user.username
     return render(request, 'normal_dashboard.html', {'username': username})
 
-# calendar screen
+@login_required # only logged in users should access this
 def calendar(request):
+    # only admin users can access this view
+    if request.user.user_type != 'admin':
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login')
     return render(request, 'calendar.html')
 
-# employee hours screen
+@login_required # only logged in users should access this
 def employee_hours(request):
+    # only staff users can access this view
+    if request.user.user_type == 'normal':
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login')
     user_type = request.user.user_type
     return render(request, 'employee_hours.html', {'user_type': user_type})
 
@@ -99,7 +123,7 @@ def live_chat(request):
     user_type = request.user.user_type
     return render(request, 'live_chat.html', {'user_type': user_type})
 
-# ticket request screen
+@login_required # only logged in users should access this
 def ticket_request(request):
     if request.method == 'POST':
         form = TicketForm(request.POST)
