@@ -48,3 +48,12 @@ login, logout.
 - python3 manage.py runserver
 - The terminal will say Starting development server at http://127.0.0.1:8000/
 - Copy the link and paste it into Safari (Chrome appears to have issues with colors)
+
+      Potential new commands for running project because of Live Chat feature:
+-     python3 -m venv myenv
+-     source myenv/bin/activate
+-     pip3 install Django
+-     pip3 install channels
+-     might have to run: python manage.py makemigrations (AND) python manage.py migrate
+-     pip3 install daphne
+-     daphne -b 127.0.0.1 -p 8000 myproject.asgi:application
