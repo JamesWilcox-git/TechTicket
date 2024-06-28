@@ -14,7 +14,7 @@
             <button onclick="window.location.href='{% url 'employee_hours' %}'">Assign Hours</button>
             <button onclick="window.location.href='{% url 'signup' %}'">New Admin</button>
             <button onclick="window.location.href='{% url 'calendar' %}'">Calendar</button>
-            <button onclick="window.location.href='{% url 'live_chat' %}'">Live Chat</button>
+            <button onclick="window.location.href='{% url 'chat' room_name='general' %}'">Live Chat</button>
         </div>
         <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
     </div>

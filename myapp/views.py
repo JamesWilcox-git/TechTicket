@@ -120,10 +120,10 @@ def employee_hours(request):
     user_type = request.user.user_type
     return render(request, 'employee_hours.html', {'user_type': user_type})
 
-@login_required # only logged in users should access this
-def live_chat(request):
-    user_type = request.user.user_type
-    return render(request, 'live_chat.html', {'user_type': user_type})
+#@login_required # only logged in users should access this
+#def live_chat(request):
+#    user_type = request.user.user_type
+#    return render(request, 'live_chat.html', {'user_type': user_type})
 
 @login_required # only logged in users should access this
 def ticket_request(request):
@@ -141,8 +141,8 @@ def ticket_request(request):
         form = TicketForm()
     return render(request, 'ticket_request.html', {'form': form})
 
+
 def chat(request, room_name):
-    #user_type = request.user.user_type
     return render(request, 'chat.html', {
         'room_name': room_name
     })
