@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser
+from .models import CustomUser, Ticket
 
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -38,12 +38,11 @@ class CustomUserCreationForm(forms.ModelForm):
             user.save()
         return user
 
-class TicketForm(forms.Form):
-    CATEGORY_CHOICES = [
-        ('repair', 'Repair Request'),
-        ('account', 'Account Help'),
-    ]
-
-    category = forms.ChoiceField(choices=CATEGORY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
-
+class TicketForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['category', 'description']
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
