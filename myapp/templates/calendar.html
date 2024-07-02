@@ -6,17 +6,104 @@
     <title>TechTicket Calendar</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+            gap: 10px;
+            padding: 10px;
+        }
+        .day {
+            padding: 20px;
+            background-color: #02bdf5;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .day:hover {
+            background-color: #0927bc;
+        }
+        .today {
+            background-color: purple;
+        }
+        .month-nav {
+            width: 100%;
+            position: relative; /* Needed for absolute positioning of children */
+            height: 50px; /* Adjust as necessary */
+            line-height: 50px; /* Center text vertically */
+        }
+        .month-nav button {
+            position: absolute;
+            top: 0;
+            height: 100%;
+        }
+        .month-nav button.left {
+            left: 25%; /* Position for left button */
+        }
+        .month-nav button.right {
+            right: 25%; /* Position for right button */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="box">
-            <h2>This is the Calendar</h2>
+        <h2>Admin Calendar</h2>
+        <div class="month-nav">
+            <button class="left" onclick="changeMonth(-1)">←</button>
+            <button class="right" onclick="changeMonth(1)">→</button>
         </div>
-        <form>
-            <div class="button-container">
-                <button type="button" onclick="window.location.href='{% url 'admin_dashboard' %}'">Back</button>
-            </div>
-        </form>
+        <h3 id="month-display"></h3>
+        <div id="calendar" class="calendar-grid"></div>
+        <button type="button" onclick="window.location.href='{% url 'admin_dashboard' %}'">Back</button>
     </div>
+    <script>
+        function loadCalendarDays(month, year) {
+            const calendar = document.getElementById('calendar');
+            const monthDisplay = document.getElementById('month-display');
+            calendar.innerHTML = ''; // Clear existing calendar
+
+            // Get the number of days in the month
+            const daysInMonth = new Date(year, month, 0).getDate();
+
+            // Display the month name
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"];
+            monthDisplay.innerText = monthNames[month - 1] + " " + year;
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+                dayDiv.innerText = day;
+                dayDiv.onclick = function() { editDayHours(day); };
+
+                // Highlight today
+                const today = new Date();
+                if (day === today.getDate() && month === today.getMonth() + 1 && year === today.getFullYear()) {
+                    dayDiv.classList.add('today');
+                }
+
+                calendar.appendChild(dayDiv);
+            }
+        }
+
+        function editDayHours(day) {
+            const monthYearText = document.getElementById('month-display').innerText;  // get month and year
+            const monthYearArray = monthYearText.split(" ");
+            const month = monthYearArray[0];  // The month
+            const year = monthYearArray[1];  // The year
+
+            const employeeNamePrompt = `Enter Employee Name for ${month} ${day}, ${year}`;
+            const hoursPrompt = `Enter hours for ${month} ${day}, ${year}`;
+
+            const employeeName = prompt(employeeNamePrompt);
+            const hours = prompt(hoursPrompt);
+
+            // save this data back to the server here
+        }
+
+        // Initialize calendar for current month and year
+        const today = new Date();
+        loadCalendarDays(today.getMonth() + 1, today.getFullYear());
+    </script>
 </body>
 </html>
