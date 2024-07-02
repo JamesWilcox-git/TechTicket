@@ -30,6 +30,7 @@ class Ticket(models.Model):
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    status = models.TextField()
     description = models.TextField()
     submitted_at = models.DateTimeField(default=timezone.now)
     assigned_employee = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tickets')

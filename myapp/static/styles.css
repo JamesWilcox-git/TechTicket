@@ -182,3 +182,15 @@ button {
     border: 1px solid #591611;
     border-radius: 5px;
 }
+
+.ticket-table {
+    width: 50%;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+.ticket-table th, .ticket-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}

@@ -5,7 +5,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm, TicketForm
 from django.contrib import messages
 from .models import CustomUser, Ticket
-import traceback
 
 # welcome/home screen
 def welcome(request):
@@ -89,8 +88,10 @@ def view_assigned_tickets(request):
     if request.user.user_type != 'employee':
         logout(request) # log out user since they are redirected to login page
         return redirect('login')
-    username = request.user.username
-    return render(request, 'view_assigned_tickets.html', {'username': username})
+    user = request.user
+    tickets = Ticket.objects.filter(assigned_employee_id = user.id)
+    username = user.username
+    return render(request, 'view_assigned_tickets.html', {'username': username, 'tickets': tickets})
 
 @login_required # only logged in users should access this
 def normal_dashboard(request):
@@ -130,6 +131,11 @@ def ticket_request(request):
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
+            # !!!
+            # change this when we start implementing the auto-assignment stuff
+            # this is hard-coded: always assigns tickets to employeetest3
+            ticket.assigned_employee_id = get_user("employeetest3").id
+            ticket.status = "unresolved"
             ticket.save()
             messages.success(request, 'Ticket submitted successfully!')
             return redirect('ticket_request')  # Redirect to the same page to show the message
@@ -138,3 +144,15 @@ def ticket_request(request):
     else:
         form = TicketForm()
     return render(request, 'ticket_request.html', {'form': form})
+
+
+
+
+# helper functions
+def get_user(username):
+    try:
+        user = CustomUser.objects.get(username=username)
+        return user
+    except:
+        print("Error: User does not exist")
+        return None

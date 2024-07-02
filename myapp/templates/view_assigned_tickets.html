@@ -3,22 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Assigned Tickets</title>
+    <title>Simple Ticket Table</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <div class="ticket-container">
-        <h2> {{ username }}'s Tickets</h2>
-
-            <! when database for user tickets is added, change url redirection and color of button based on ticket info djask> 
-            <button class="ticket-button-resolved" onclick="window.location.href='{% url 'employee_dashboard' %}'">My iPad broke</button>
-            <button class="ticket-button-not-resolved" onclick="window.location.href='{% url 'employee_dashboard' %}'">I spilled water on PC</button>
-            <button class="ticket-button-resolved" onclick="window.location.href='{% url 'employee_dashboard' %}'">CAPSLOCK BROKEN</button>
-            <button class="ticket-button-resolved" onclick="window.location.href='{% url 'employee_dashboard' %}'">How do I install Minecraft??</button>
-
-        <h2></h2>
-        <button class="back-button" onclick="window.location.href='{% url 'employee_dashboard' %}'">Back</button>
-    </div>
+<div class="container">
+    <h2>Tickets</h2>
+    <table class="ticket-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.category }}</td>
+                <td>{{ ticket.description }}</td>
+                <td>{{ ticket.status }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No tickets found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
