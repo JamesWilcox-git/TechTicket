@@ -12,8 +12,7 @@ can support the large quantity of tickets our department receives. Additionally,
 should include both asynchronous and live chat between the ticket submitter and IT staff.
 While this system is not required to be developed to be accessed via the web, it must be able to
 be run on multiple different machines while accessing a central database (you will run a
-database locally for testing and development, but it should function as if you were connecting to
-a database on a central server). You will gather more detailed requirements at an upcoming
+database locally for testing and development, but it should function as if you were connecting to a database on a central server). You will gather more detailed requirements at an upcoming
 client meeting with your project manager/TA.
 
 # Course Specifications:
