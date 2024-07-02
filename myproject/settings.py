@@ -115,3 +115,6 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'myapp.CustomUser'
+
+# this redirects to login page if user is not authenticated
+LOGIN_URL = '/login/'
