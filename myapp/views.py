@@ -75,6 +75,11 @@ def employee_dashboard(request):
     username = request.user.username
     return render(request, 'employee_dashboard.html', {'username': username})
 
+# employee assigned tickets screen
+def view_assigned_tickets(request):
+    username = request.user.username
+    return render(request, 'view_assigned_tickets.html', {'username': username})
+
 # normal_dashboard home screen
 def normal_dashboard(request):
     username = request.user.username

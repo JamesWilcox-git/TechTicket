@@ -46,3 +46,5 @@ login, logout.
 - source myenv/bin/activate
 - pip3 install Django
 - python3 manage.py runserver
+- The terminal will say Starting development server at http://127.0.0.1:8000/
+- Copy the link and paste it into Safari (Chrome appears to have issues with colors)
