@@ -145,6 +145,12 @@ def ticket_request(request):
         form = TicketForm()
     return render(request, 'ticket_request.html', {'form': form})
 
+# ticket view screen
+@login_required
+def view_tickets(request):
+    tickets = Ticket.objects.filter(user=request.user)
+    return render(request, 'view_tickets.html', {'tickets': tickets})
+
 
 
 

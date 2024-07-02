@@ -4,6 +4,7 @@
     padding: 20px;
     border-radius: 10px;
     background-color: #fff;
+    color: white;
 }
 
 .box {
@@ -166,5 +167,34 @@ button {
 .ticket-table td {
     border: 2px solid black;
     padding: 6px;
-    text-align: left;
+    text-align: left;}
+    
+.ticket-button-not-resolved {
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: #d02b1f;
+    border: 1px solid #d02b1f;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.ticket-button-not-resolved:hover {
+    background-color: #591611;
+    border: 1px solid #591611;
+    border-radius: 5px;
+}
+
+.table {
+    color: white;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: white;
+}
+
+.table tbody td {
+    background-color: #3a3f44;
+    color: white;
 }
