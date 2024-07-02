@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
@@ -13,3 +14,25 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+class Ticket(models.Model):
+    CATEGORY_CHOICES = [
+        ('repair', 'Repair Request'),
+        ('account', 'Account Help'),
+        ('tech_support', 'Technical Support'),
+        ('account_management', 'Account Management'),
+        ('general_inquiry', 'General Inquiry'),
+        ('maintenance', 'Maintenance Request'),
+        ('security', 'Security Issue'),
+        ('customer_service', 'Customer Service'),
+        ('other', 'Other'),
+    ]
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    description = models.TextField()
+    submitted_at = models.DateTimeField(default=timezone.now)
+    assigned_employee = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tickets')
+
+    def __str__(self):
+        return f"{self.get_category_display()} - {self.user.username}"
