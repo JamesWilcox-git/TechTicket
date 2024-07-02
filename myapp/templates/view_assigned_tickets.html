@@ -13,17 +13,38 @@
     <table class="ticket-table">
         <thead>
             <tr>
+                <th>Ticket ID</th>
+                <th>Username</th>
                 <th>Category</th>
                 <th>Description</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
+
             {% for ticket in tickets %}
             <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.user.username }}</td>
                 <td>{{ ticket.category }}</td>
                 <td>{{ ticket.description }}</td>
-                <td>{{ ticket.status }}</td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                        <select name="status" onchange="this.form.submit()">
+                            <option value="open" {% if ticket.status == "open" %} selected {% endif %}>Open</option>
+                            <option value="in_progress" {% if ticket.status == "in_progress" %} selected {% endif %}>In Progress</option>
+                            <option value="closed" {% if ticket.status == "closed" %} selected {% endif %}>Closed</option>
+                        </select>
+                    </form>
+                </td>
+
+                <td>
+                    <!replace html url with new ViewTicketDetailes.html >
+                    <a href="{% url 'employee_dashboard' %}" class="view-ticket-button">View Ticket</a>
+                </td>
+                
             </tr>
             {% empty %}
             <tr>

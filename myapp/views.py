@@ -135,7 +135,7 @@ def ticket_request(request):
             # change this when we start implementing the auto-assignment stuff
             # this is hard-coded: always assigns tickets to employeetest3
             ticket.assigned_employee_id = get_user("employeetest3").id
-            ticket.status = "unresolved"
+            ticket.status = "open"
             ticket.save()
             messages.success(request, 'Ticket submitted successfully!')
             return redirect('ticket_request')  # Redirect to the same page to show the message
