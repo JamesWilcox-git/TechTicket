@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Tickets</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+            display: inline-block;
+        }
+        .full-text {
+            display: none;
+        }
+        .show-more {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Tickets</h2>
+        {% if tickets %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Submitted At</th>
+                        <th>Assigned Employee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td>{{ ticket.get_category_display }}</td>
+                            <td>
+                                <span class="truncate">{{ ticket.description|slice:":50" }}{% if ticket.description|length > 50 %}...{% endif %}</span>
+                                <span class="full-text">{{ ticket.description }}</span>
+                                {% if ticket.description|length > 50 %}
+                                    <span class="show-more" onclick="toggleDescription(this)">See More</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ ticket.submitted_at }}</td>
+                            <td>
+                                {% if ticket.assigned_employee %}
+                                    {{ ticket.assigned_employee.username }}
+                                {% else %}
+                                    Unassigned
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You have no tickets.</p>
+        {% endif %}
+        <a href="{% url 'normal_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+    <script>
+        function toggleDescription(element) {
+            const truncate = element.parentElement.querySelector('.truncate');
+            const fullText = element.parentElement.querySelector('.full-text');
+            if (truncate.style.display === "none") {
+                truncate.style.display = "inline";
+                fullText.style.display = "none";
+                element.textContent = "See More";
+            } else {
+                truncate.style.display = "none";
+                fullText.style.display = "inline";
+                element.textContent = "See Less";
+            }
+        }
+    </script>
+</body>
+</html>
