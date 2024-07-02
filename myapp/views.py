@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm
-from django.contrib import messages
 from .forms import CustomUserCreationForm, TicketForm
+from django.contrib import messages
+from .models import CustomUser, Ticket
 import traceback
 
 # welcome/home screen
@@ -128,11 +128,11 @@ def ticket_request(request):
     if request.method == 'POST':
         form = TicketForm(request.POST)
         if form.is_valid():
-            category = form.cleaned_data['category']
-            description = form.cleaned_data['description']
-            # You can process the form data here (e.g., send an email, log to file, etc.)
+            ticket = form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
             messages.success(request, 'Ticket submitted successfully!')
-            return redirect('normal_dashboard')
+            return redirect('ticket_request')  # Redirect to the same page to show the message
         else:
             messages.error(request, 'Error submitting ticket. Please try again.')
     else:
