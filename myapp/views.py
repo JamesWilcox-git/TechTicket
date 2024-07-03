@@ -83,7 +83,7 @@ def employee_dashboard(request):
     return render(request, 'employee_dashboard.html', {'username': username})
 
 @login_required # only logged in users should access this
-def view_assigned_tickets(request):
+def employee_view_tickets(request):
     # only employee users can access this view
     if request.user.user_type != 'employee':
         logout(request) # log out user since they are redirected to login page
@@ -91,15 +91,16 @@ def view_assigned_tickets(request):
     user = request.user
     tickets = Ticket.objects.filter(assigned_employee_id = user.id)
     username = user.username
-    return render(request, 'view_assigned_tickets.html', {'username': username, 'tickets': tickets})
+    return render(request, 'employee_view_tickets.html', {'username': username, 'tickets': tickets})
 
 @login_required # only logged in users should access this
 def normal_dashboard(request):
     # only normal users can access this view
-    if request.user.user_type != 'normal':
+    user = request.user
+    if user.user_type != 'normal':
         logout(request) # log out user since they are redirected to login page
         return redirect('login')
-    username = request.user.username
+    username = user.username
     return render(request, 'normal_dashboard.html', {'username': username})
 
 @login_required # only logged in users should access this
@@ -145,12 +146,27 @@ def ticket_request(request):
         form = TicketForm()
     return render(request, 'ticket_request.html', {'form': form})
 
-# ticket view screen
+# normal user ticket view screen
 @login_required
 def view_tickets(request):
     tickets = Ticket.objects.filter(user=request.user)
     return render(request, 'view_tickets.html', {'tickets': tickets})
 
+# ticket info screen
+@login_required
+def achat_ticket(request, ticket_id):
+    # admins can see any ticket, normal/employee users can only see their own tickets
+    current_user = request.user
+    ticket_user_id = Ticket.objects.get(id=ticket_id).user.id
+    ticket_assigned_e_id = Ticket.objects.get(id=ticket_id).assigned_employee.id
+    if current_user.user_type == 'normal' and current_user.id != ticket_user_id:
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login')
+    elif current_user.user_type == 'employee' and current_user.id != ticket_assigned_e_id:
+        logout(request) # log out user since they are redirected to login page
+        return redirect('login') 
+    ticket = Ticket.objects.get(id=ticket_id)
+    return render(request, 'achat_ticket.html', {'ticket': ticket, 'current_user': current_user})
 
 
 
