@@ -12,8 +12,12 @@
         <h2> Hello, {{ username }}</h2>
         <div class="button-container">
             <button onclick="window.location.href='{% url 'ticket_request' %}'">Submit Ticket</button>
+        </div>
+        <div class="button-container">
+            <button onclick="window.location.href='{% url 'view_tickets'  %}'">View Tickets</button>
+        </div>
+        <div class="button-container">
             <button onclick="window.location.href='{% url 'live_chat' %}'">Live Chat</button>
-            <button onclick="window.location.href='{% url 'view_tickets' %}'">View Tickets</button>
         </div>
         <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
     </div>

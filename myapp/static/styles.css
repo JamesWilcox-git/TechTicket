@@ -1,3 +1,9 @@
+a:visited {
+    color: pink;
+    background-color: transparent;
+    text-decoration: none;
+  }
+
 .container {
     text-align: center;
     border: 1px solid #2f0747;
@@ -6,6 +12,7 @@
     background-color: #fff;
     color: white;
 }
+
 
 .box {
     background-color: #f8d7da;
@@ -60,6 +67,37 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
+h4
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+.chatheader {
+    background-color: rgba(16, 71, 200, 0.094);
+    text-align: right;
+    border: 1px solid #2f0747;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+
+.chatcontainerdescription {
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.224);
+    padding: 20px;
+    margin: 5px;
+    border-radius: 50px;
+    color: white;
+}
+
+.chatcontainer {
+    text-align: left;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
 
 .box {
     background-color: #f8d7da;
@@ -152,38 +190,58 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
+/* view_assigned_tickets.html */
 .ticket-table {
-    width: 50%;
-    border-collapse: collapse;
-    margin: 20px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 80%;
+    margin: 20px 0;
 }
 
 .ticket-table th{
-    border: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.263);
+    color: white;
     padding: 15px;
     text-align: center;
+    border: 1px solid black;
+}
+
+.rounded-header-left {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.rounded-header-middle {
+    border-radius: 0;
+}
+
+.rounded-header-right {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .ticket-table td {
-    border: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.114);
+    border: 1px solid black;
     padding: 6px;
     text-align: left;}
-    
-.ticket-button-not-resolved {
-    margin-top: 5px;
-    padding: 10px 20px;
-    background-color: #d02b1f;
-    border: 1px solid #d02b1f;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
+
+.rounded-body-left {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
-.ticket-button-not-resolved:hover {
-    background-color: #591611;
-    border: 1px solid #591611;
-    border-radius: 5px;
+.rounded-body-middle {
+    border-radius: 0;
 }
+
+.rounded-body-right {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+/* end of view_assigned_tickets.html */
+
+
 
 .table {
     color: white;
