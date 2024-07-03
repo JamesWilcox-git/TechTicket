@@ -13,7 +13,7 @@ urlpatterns = [
     path('employee_hours/', views.employee_hours, name='employee_hours'),
     path('live_chat/', views.live_chat, name='live_chat'),
     path('ticket_request/', views.ticket_request, name='ticket_request'),
-    path('view_assigned_tickets/', views.view_assigned_tickets, name='view_assigned_tickets'),
+    path('employee_view_tickets/', views.employee_view_tickets, name='employee_view_tickets'),
     path('view_tickets/', views.view_tickets, name='view_tickets'),
     path('ticket/<int:ticket_id>/', views.achat_ticket, name='achat_ticket'),
 ]

@@ -83,7 +83,7 @@ def employee_dashboard(request):
     return render(request, 'employee_dashboard.html', {'username': username})
 
 @login_required # only logged in users should access this
-def view_assigned_tickets(request):
+def employee_view_tickets(request):
     # only employee users can access this view
     if request.user.user_type != 'employee':
         logout(request) # log out user since they are redirected to login page
@@ -91,7 +91,7 @@ def view_assigned_tickets(request):
     user = request.user
     tickets = Ticket.objects.filter(assigned_employee_id = user.id)
     username = user.username
-    return render(request, 'view_assigned_tickets.html', {'username': username, 'tickets': tickets})
+    return render(request, 'employee_view_tickets.html', {'username': username, 'tickets': tickets})
 
 @login_required # only logged in users should access this
 def normal_dashboard(request):

@@ -28,7 +28,7 @@
             </div>
         </div>
         
-        <button class="back-button" onclick="window.location.href='{% if user.user_type == 'admin' %}{% url 'admin_dashboard' %}{% elif user.user_type == 'employee' %}{% url 'view_assigned_tickets' %}{% else %}{% url 'view_tickets' %}{% endif %}'">Back</button>
+        <button class="back-button" onclick="window.location.href='{% if user.user_type == 'admin' %}{% url 'admin_dashboard' %}{% elif user.user_type == 'employee' %}{% url 'employee_view_tickets' %}{% else %}{% url 'view_tickets' %}{% endif %}'">Back</button>
     </div>
 </body>
 </html>
