@@ -26,10 +26,6 @@ def user_login(request):
                     return redirect('employee_dashboard')
                 else:
                     return redirect('normal_dashboard')
-            else:
-                messages.error(request, "Invalid username or password.")
-        else:
-            messages.error(request, "Invalid username or password.")
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -57,8 +53,9 @@ def signup(request):
                 return redirect('normal_dashboard')
         else:
             messages.error(request, "Error creating account. Please try again.")
-            print("Form is not valid")
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request,error)
     else:
         form = CustomUserCreationForm(user=request.user)
 
