@@ -10,7 +10,7 @@
     <script>
         // Establish WebSocket connection
         const chatSocket = new WebSocket(
-            'ws://192.168.0.38:8000/ws/ticket/{{ ticket.id }}/'
+            'ws://"replace-with-ip-address"/ws/ticket/{{ ticket.id }}/'
         );
 
         // Handle incoming WebSocket messages
