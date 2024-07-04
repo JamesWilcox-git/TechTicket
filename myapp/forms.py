@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser, Ticket
+from .models import CustomUser, Ticket, ChatMessage
 
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -46,3 +46,8 @@ class TicketForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+class ChatMessageForm(forms.ModelForm):
+    class Meta:
+        model = ChatMessage
+        fields = ['message']

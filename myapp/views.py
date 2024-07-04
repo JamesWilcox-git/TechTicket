@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm, TicketForm
+from .forms import CustomUserCreationForm, TicketForm, ChatMessageForm
 from django.contrib import messages
-from .models import CustomUser, Ticket
+from .models import CustomUser, Ticket, ChatMessage
+from django.http import HttpResponse
 
 # welcome/home screen
 def welcome(request):
@@ -165,7 +166,8 @@ def achat_ticket(request, ticket_id):
         logout(request) # log out user since they are redirected to login page
         return redirect('login') 
     ticket = Ticket.objects.get(id=ticket_id)
-    return render(request, 'achat_ticket.html', {'ticket': ticket, 'current_user': current_user})
+    messages = ChatMessage.objects.filter(ticket_id=ticket_id)
+    return render(request, 'achat_ticket.html', {'ticket': ticket, 'current_user': current_user, 'messages': messages})
 
 
 
@@ -203,3 +205,19 @@ def update_ticket_time_spent(request, ticket_id):
         ticket.time_spent = float(time_spent)
         ticket.save()
         return redirect('employee_view_tickets')  # Adjust redirect as needed
+    
+@login_required
+def save_chat_message(request, ticket_id):
+    if request.method == 'POST':
+        form = ChatMessageForm(request.POST)
+        if form.is_valid():
+            # Create a new ChatMessage object but don't save it yet
+            new_message = form.save(commit=False)
+            new_message.sender = request.user
+            new_message.ticket_id = ticket_id
+            # Optionally do additional processing here
+            new_message.save()  # Save the message to the database
+            return redirect('achat_ticket', ticket_id=ticket_id)
+    else:
+        form = ChatMessageForm()
+    return HttpResponse(status=400)  # Respond with HTTP 400 Bad Request if form is invalid or method is not POST

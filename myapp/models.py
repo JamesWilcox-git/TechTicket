@@ -34,18 +34,18 @@ class Ticket(models.Model):
         ('open', 'Open'),
         ('in_progress', 'In Progress'),
         ('closed', 'Closed'),
-    ])
+    ], default='open')
     description = models.TextField()
     submitted_at = models.DateTimeField(default=timezone.now)
     assigned_employee = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tickets')
-    time_estimate = models.FloatField()
-    time_spent = models.FloatField()
+    time_estimate = models.FloatField(default=0.0)
+    time_spent = models.FloatField(default=0.0)
 
     def __str__(self):
         return f"{self.get_category_display()} - {self.user.username}"
 
 class ChatMessage(models.Model):
-    ticket = models.ForeignKey(Ticket, related_name='chat_messages', on_delete=models.CASCADE)
     sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    ticket_id = models.IntegerField()
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

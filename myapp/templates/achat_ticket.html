@@ -53,11 +53,17 @@
         
         <div id="chat-container" class="chatcontainer">
             <!-- Chat messages will be appended here -->
+            {% for message in messages %}
+                <div>{{ message.sender.username }}: {{ message.message }}</div>
+            {% endfor %}
         </div>
         
         <div class="chat-input">
-            <input type="text" id="message-input" placeholder="Type your message...">
-            <button onclick="sendMessage()">Send</button>
+            <form id="message-form" method="post" action="{% url 'save_chat_message' ticket.id %}">
+                {% csrf_token %}
+                <input type="text" id="message-input" name="message" placeholder="Type your message...">
+                <button type="submit">Send</button>
+            </form>
         </div>
 
         <button class="back-button" onclick="window.location.href='{% if user.user_type == 'admin' %}{% url 'admin_dashboard' %}{% elif user.user_type == 'employee' %}{% url 'employee_view_tickets' %}{% else %}{% url 'view_tickets' %}{% endif %}'">Back</button>
