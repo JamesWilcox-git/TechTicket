@@ -17,7 +17,9 @@
                 <th class="rounded-header-middle">Username</th>
                 <th class="rounded-header-middle">Category</th>
                 <th class="rounded-header-middle">Description</th>
-                <th class="rounded-header-right">Status</th>
+                <th class="rounded-header-middle">Status</th>
+                <th class="rounded-header-middle">Time Estimate (Hrs)</th>
+                <th class="rounded-header-right">Time Spent (Hrs)</th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +31,7 @@
                 <td class="rounded-header-middle">{{ ticket.category }}</td>
                 <td class="rounded-header-middle">{{ ticket.description }}</td>
                 <td class="rounded-header-middle">
-                    <form method="post">
+                    <form method="post" action="{% url 'update_ticket_status' ticket.id %}">
                         {% csrf_token %}
                         <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
                         <select name="status" onchange="this.form.submit()">
@@ -39,7 +41,20 @@
                         </select>
                     </form>
                 </td>
-
+                <td class="rounded-header-middle">
+                    <form method="post" action="{% url 'update_ticket_time_estimate' ticket.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="time_estimate" value="{{ ticket.time_estimate }}" step="0.5" min="0">
+                        <button class="button-submit">Update</button>
+                    </form>
+                </td>
+                <td class="rounded-header-middle">
+                    <form method="post" action="{% url 'update_ticket_time_spent' ticket.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="time_spent" value="{{ ticket.time_spent }}" step="0.5" min="0">
+                        <button class="button-submit">Update</button>
+                    </form>
+                </td>
                 <td class="rounded-header-right">
                     <a href="{% url 'achat_ticket' ticket.id %}">View Ticket</a>
                 </td>

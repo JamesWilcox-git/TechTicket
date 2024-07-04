@@ -177,3 +177,29 @@ def get_user(username):
     except:
         print("Error: User does not exist")
         return None
+
+
+def update_ticket_status(request, ticket_id):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        ticket = Ticket.objects.get(id=ticket_id)
+        ticket.status = status
+        ticket.save()
+        return redirect('employee_view_tickets')  # Adjust redirect as needed
+
+
+def update_ticket_time_estimate(request, ticket_id):
+    if request.method == 'POST':
+        time_estimate = request.POST.get('time_estimate')
+        ticket = Ticket.objects.get(id=ticket_id)
+        ticket.time_estimate = float(time_estimate)
+        ticket.save()
+        return redirect('employee_view_tickets')  # Adjust redirect as needed
+    
+def update_ticket_time_spent(request, ticket_id):
+    if request.method == 'POST':
+        time_spent = request.POST.get('time_spent')
+        ticket = Ticket.objects.get(id=ticket_id)
+        ticket.time_spent = float(time_spent)
+        ticket.save()
+        return redirect('employee_view_tickets')  # Adjust redirect as needed

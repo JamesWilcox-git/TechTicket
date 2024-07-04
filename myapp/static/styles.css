@@ -115,6 +115,17 @@ button {
     transition: background 0.3s ease;
 }
 
+.button-submit {
+    border: 0px;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    background: #2575fc;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
 
 .button:hover {
     background: #05a;

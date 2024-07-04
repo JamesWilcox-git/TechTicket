@@ -16,4 +16,7 @@ urlpatterns = [
     path('employee_view_tickets/', views.employee_view_tickets, name='employee_view_tickets'),
     path('view_tickets/', views.view_tickets, name='view_tickets'),
     path('ticket/<int:ticket_id>/', views.achat_ticket, name='achat_ticket'),
+    path('update_ticket_status/<int:ticket_id>/', views.update_ticket_status, name='update_ticket_status'),
+    path('update_ticket_time_estimate/<int:ticket_id>/', views.update_ticket_time_estimate, name='update_ticket_time_estimate'),
+    path('update_ticket_time_spent/<int:ticket_id>/', views.update_ticket_time_spent, name='update_ticket_time_spent'),
 ]
