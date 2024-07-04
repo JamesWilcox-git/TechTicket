@@ -17,7 +17,7 @@
             <button onclick="window.location.href='{% url 'view_tickets'  %}'">View Tickets</button>
         </div>
         <div class="button-container">
-            <button onclick="window.location.href='{% url 'live_chat' %}'">Live Chat</button>
+            <a href="{% url 'chat_room' room_name='general' %}">Go to Chat</a>
         </div>
         <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
     </div>

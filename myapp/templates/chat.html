@@ -1,0 +1,60 @@
+<!-- chat.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Chat</title>
+    <script>
+        // JavaScript for WebSocket connection
+        const roomName = "{{ room_name }}";  // Get room_name from Django context
+
+        const chatSocket = new WebSocket(
+            'ws://192.168.0.38:8000/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(event) {
+            const message = JSON.parse(event.data).message;
+            const chatMessages = document.querySelector('#chat-messages');
+            chatMessages.innerHTML += '<div class="message">' + message + '</div>';
+        };
+
+        chatSocket.onclose = function(event) {
+            console.error('WebSocket closed unexpectedly');
+        };
+
+        function sendMessage() {
+            const messageInputDom = document.querySelector('#chat-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        }
+    </script>
+    <style>
+        /* Optional: Add some basic styles for the chat messages */
+        #chat-messages {
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .message {
+            padding: 5px;
+            margin-bottom: 5px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <div id="chat-messages"></div>
+        <input id="chat-input" type="text" placeholder="Type your message...">
+        <button id="chat-send" onclick="sendMessage()">Send</button>
+    </div>
+</body>
+</html>

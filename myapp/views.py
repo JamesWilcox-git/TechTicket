@@ -119,9 +119,10 @@ def employee_hours(request):
     return render(request, 'employee_hours.html', {'user_type': user_type})
 
 # live chat screen
-def live_chat(request):
-    user_type = request.user.user_type
-    return render(request, 'live_chat.html', {'user_type': user_type})
+def chat_room(request, room_name):
+    return render(request, 'chat.html', {
+        'room_name': room_name
+    })
 
 @login_required # only logged in users should access this
 def ticket_request(request):
