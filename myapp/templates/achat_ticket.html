@@ -3,31 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Ticket Log</title>
+    <title>Asynchronous Chat</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script>
+        // Establish WebSocket connection
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/ticket/{{ ticket.id }}/'
+        );
+
+        // Handle incoming WebSocket messages
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            appendMessage(data.sender_id, data.message);
+        };
+
+        // Send message function
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInput.value = '';
+            }
+        }
+
+        // Append message to chat window
+        function appendMessage(senderId, message) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageElement = document.createElement('div');
+            messageElement.innerText = `${senderId}: ${message}`;
+            chatContainer.appendChild(messageElement);
+        }
+    </script>
 </head>
 <body>
     <div class="chatheader">
         <h2>Asynchronous Chat</h2>
-        <h4>Ticket ID: {{ticket.id}}</h4>
-        <h4>Category: {{ticket.category}}</h4>
-        <h4>Status: {{ticket.status}}</h4>
+        <h4>Ticket ID: {{ ticket.id }}</h4>
+        <h4>Category: {{ ticket.category }}</h4>
+        <h4>Status: {{ ticket.status }}</h4>
         
         <div class="chatcontainerdescription">
-            <div>Description: {{ticket.description}}</div>
+            <div>Description: {{ ticket.description }}</div>
         </div>
         
-        <div class="chatcontainer">
-            <div>
-                {{ticket.user.username}} - Time: This is my ticket 
-                <br> <br>
-                {{ticket.assigned_employee.username}} - Time: Hi im the employee
-                <br> <br>
-                {{ticket.assigned_employee.username}} - Time: What is happening?
-            </div>
+        <div id="chat-container" class="chatcontainer">
+            <!-- Chat messages will be appended here -->
         </div>
         
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
         <button class="back-button" onclick="window.location.href='{% if user.user_type == 'admin' %}{% url 'admin_dashboard' %}{% elif user.user_type == 'employee' %}{% url 'employee_view_tickets' %}{% else %}{% url 'view_tickets' %}{% endif %}'">Back</button>
     </div>
 </body>

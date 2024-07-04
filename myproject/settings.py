@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from django.core.asgi import get_asgi_application
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +27,8 @@ SECRET_KEY = 'django-insecure-ei+h@+k4!k0_pqbxv8u%4+n6#jiv)2rb16*y!0o8s@!7v$l7nc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','192.168.0.38','172.27.60.68','*']
+
 
 
 # Application definition
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -68,7 +72,23 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myproject.wsgi.application'
+
+#CHANNEL_LAYERS = {'default': {'BACKEND': 'channels_redis.core.RedisChannelLayer','CONFIG': {'hosts': [('172.27.60.68', 6379),],},},}
+
+#python3 manage.py runserver 172.27.60.68:8000
+#python3 manage.py runserver 192.168.0.38:8000
+#python3 manage.py runserver 0.0.0.0:8000
+#redis-cli -h 172.27.60.68 -p 6379 ping
+#redis-cli -h 192.168.0.38 -p 6379 ping
+#python manage.py runserver 172.27.60.68:8000
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Use in-memory layer or replace with Redis if preferred
+    },
+}
+ASGI_APPLICATION = 'myproject.asgi.application'
 
 
 # Database
