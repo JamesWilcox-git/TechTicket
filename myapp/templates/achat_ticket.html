@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--'ws://' + window.location.host + '/ws/ticket/{{ ticket.id }}/'-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asynchronous Chat</title>
@@ -9,7 +10,7 @@
     <script>
         // Establish WebSocket connection
         const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/ticket/{{ ticket.id }}/'
+            'ws://192.168.0.38:8000/ws/ticket/{{ ticket.id }}/'
         );
 
         // Handle incoming WebSocket messages
