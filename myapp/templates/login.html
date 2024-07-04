@@ -15,18 +15,9 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <div class="button-container">
-                <button type="button" onclick="window.location.href='{% url 'welcome' %}'">Back</button>
-                <button type="submit">Login</button>
-            </div>
+            <button type="button" onclick="window.location.href='{% url 'welcome' %}'">Back</button>
+            <button type="submit">Login</button>
         </form>
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
     </div>
 </body>
 </html>

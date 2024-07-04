@@ -38,6 +38,8 @@ class Ticket(models.Model):
     description = models.TextField()
     submitted_at = models.DateTimeField(default=timezone.now)
     assigned_employee = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tickets')
+    time_estimate = models.FloatField()
+    time_spent = models.FloatField()
 
     def __str__(self):
         return f"{self.get_category_display()} - {self.user.username}"

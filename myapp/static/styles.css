@@ -13,28 +13,10 @@ a:visited {
     color: white;
 }
 
-
-.box {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
 .button-container {
     display: flex;
     justify-content: space-around;
     margin-top: 20px;
-}
-
-button {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    border-radius: 5px;
-    padding: 10px 20px;
-    color: #155724;
-    cursor: pointer;
 }
 
 .input-container {
@@ -50,7 +32,7 @@ input[type="text"], input[type="password"] {
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
+    background: linear-gradient(to right, orange, #2575fc);
     color: white;
     height: 100vh;
     display: flex;
@@ -61,7 +43,7 @@ body {
 }
 
 .container {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(5, 3, 100, 0.429);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -74,7 +56,7 @@ h4
 }
 
 .chatheader {
-    background-color: rgba(16, 71, 200, 0.094);
+    background-color: rgba(5, 3, 100, 0.429);
     text-align: right;
     border: 1px solid #2f0747;
     padding: 20px;
@@ -100,8 +82,8 @@ h4
 }
 
 .box {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
+    background-color: rgba(5, 3, 100, 0.429);
+    border: 1px solid rgba(5, 3, 100, 0.429);
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 20px;
@@ -110,7 +92,7 @@ h4
 h2 {
     margin: 0;
     color: #ffffff;
-    outline: #05a;
+    outline: #2575fc;
     outline-width: 5px;
     text-align: center;
 }
@@ -122,17 +104,28 @@ h2 {
 }
 
 button {
-    border: 1px solid #c3c4e6;
+    border: 0px solid orange;
     outline: none;
     padding: 10px 20px;
     border-radius: 5px;
-    background: #08d;
+    background: #2575fc;
     color: white;
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 
+.button-submit {
+    border: 0px;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    background: #2575fc;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
 
 .button:hover {
     background: #05a;
@@ -199,7 +192,7 @@ button {
 }
 
 .ticket-table th{
-    background-color: rgba(255, 255, 255, 0.263);
+    background-color: rgba(30, 27, 27, 0.263);
     color: white;
     padding: 15px;
     text-align: center;
@@ -221,7 +214,7 @@ button {
 }
 
 .ticket-table td {
-    background-color: rgba(255, 255, 255, 0.114);
+    background-color: rgba(30, 27, 27, 0.263);
     border: 1px solid black;
     padding: 6px;
     text-align: left;}

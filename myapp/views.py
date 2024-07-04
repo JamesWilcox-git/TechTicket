@@ -26,10 +26,6 @@ def user_login(request):
                     return redirect('employee_dashboard')
                 else:
                     return redirect('normal_dashboard')
-            else:
-                messages.error(request, "Invalid username or password.")
-        else:
-            messages.error(request, "Invalid username or password.")
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -57,8 +53,9 @@ def signup(request):
                 return redirect('normal_dashboard')
         else:
             messages.error(request, "Error creating account. Please try again.")
-            print("Form is not valid")
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request,error)
     else:
         form = CustomUserCreationForm(user=request.user)
 
@@ -137,6 +134,8 @@ def ticket_request(request):
             # this is hard-coded: always assigns tickets to employeetest3
             ticket.assigned_employee_id = get_user("employeetest3").id
             ticket.status = "open"
+            ticket.time_estimate = 0
+            ticket.time_spent = 0
             ticket.save()
             messages.success(request, 'Ticket submitted successfully!')
             return redirect('ticket_request')  # Redirect to the same page to show the message
@@ -170,7 +169,7 @@ def achat_ticket(request, ticket_id):
 
 
 
-# helper functions
+# ---------------------------- helper functions ----------------------------------------------
 def get_user(username):
     try:
         user = CustomUser.objects.get(username=username)
@@ -178,3 +177,29 @@ def get_user(username):
     except:
         print("Error: User does not exist")
         return None
+
+
+def update_ticket_status(request, ticket_id):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        ticket = Ticket.objects.get(id=ticket_id)
+        ticket.status = status
+        ticket.save()
+        return redirect('employee_view_tickets')  # Adjust redirect as needed
+
+
+def update_ticket_time_estimate(request, ticket_id):
+    if request.method == 'POST':
+        time_estimate = request.POST.get('time_estimate')
+        ticket = Ticket.objects.get(id=ticket_id)
+        ticket.time_estimate = float(time_estimate)
+        ticket.save()
+        return redirect('employee_view_tickets')  # Adjust redirect as needed
+    
+def update_ticket_time_spent(request, ticket_id):
+    if request.method == 'POST':
+        time_spent = request.POST.get('time_spent')
+        ticket = Ticket.objects.get(id=ticket_id)
+        ticket.time_spent = float(time_spent)
+        ticket.save()
+        return redirect('employee_view_tickets')  # Adjust redirect as needed
