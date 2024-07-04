@@ -1,5 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
 import json
+from asgiref.sync import async_to_sync
 
 class TicketConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -41,7 +42,7 @@ class LiveConsumer(WebsocketConsumer):
         self.room_group_name = f'chat_{self.room_name}'
 
         # Join room group
-        self.channel_layer.group_add(
+        async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
@@ -50,7 +51,7 @@ class LiveConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         # Leave room group
-        self.channel_layer.group_discard(
+        async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
@@ -60,7 +61,7 @@ class LiveConsumer(WebsocketConsumer):
         message = text_data_json['message']
 
         # Send message to room group
-        self.channel_layer.group_send(
+        async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
