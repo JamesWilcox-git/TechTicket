@@ -134,6 +134,8 @@ def ticket_request(request):
             # this is hard-coded: always assigns tickets to employeetest3
             ticket.assigned_employee_id = get_user("employeetest3").id
             ticket.status = "open"
+            ticket.time_estimate = 0
+            ticket.time_spent = 0
             ticket.save()
             messages.success(request, 'Ticket submitted successfully!')
             return redirect('ticket_request')  # Redirect to the same page to show the message
@@ -167,7 +169,7 @@ def achat_ticket(request, ticket_id):
 
 
 
-# helper functions
+# ---------------------------- helper functions ----------------------------------------------
 def get_user(username):
     try:
         user = CustomUser.objects.get(username=username)
