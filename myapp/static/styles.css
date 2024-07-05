@@ -57,6 +57,7 @@ h4
 
 .chatheader {
     background-color: rgba(5, 3, 100, 0.429);
+    width: 60%;
     text-align: right;
     border: 1px solid #2f0747;
     padding: 20px;

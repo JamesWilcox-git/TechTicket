@@ -102,27 +102,28 @@ def normal_dashboard(request):
     return render(request, 'normal_dashboard.html', {'username': username})
 
 @login_required # only logged in users should access this
-def calendar(request):
-    # only admin users can access this view
-    if request.user.user_type != 'admin':
+def admin_calendar(request):
+    # only admins users can access this view
+    user = request.user
+    if user.user_type != 'admin':
         logout(request) # log out user since they are redirected to login page
         return redirect('login')
-    return render(request, 'calendar.html')
+    return render(request, 'admin_calendar.html', {'user': user})
 
 @login_required # only logged in users should access this
-def employee_hours(request):
-    # only staff users can access this view
-    if request.user.user_type == 'normal':
+def employee_calendar(request):
+    # only employees users can access this view
+    user = request.user
+    if user.user_type != 'employee':
         logout(request) # log out user since they are redirected to login page
         return redirect('login')
-    user_type = request.user.user_type
-    return render(request, 'employee_hours.html', {'user_type': user_type})
+    return render(request, 'employee_calendar.html', {'user': user})
 
+@login_required # only logged in users should access this
 # live chat screen
 def chat_room(request, room_name):
-    return render(request, 'chat.html', {
-        'room_name': room_name
-    })
+    user = request.user
+    return render(request, 'chat.html', {'room_name': room_name, 'user': user})
 
 @login_required # only logged in users should access this
 def ticket_request(request):

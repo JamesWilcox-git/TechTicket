@@ -39,6 +39,22 @@
             chatContainer.appendChild(messageElement);
         }
     </script>
+    <style>
+        #chat-messages {
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            overflow-x: scroll;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .message {
+            padding: 5px;
+            margin-bottom: 5px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="chatheader">
@@ -53,9 +69,12 @@
         
         <div id="chat-container" class="chatcontainer">
             <!-- Chat messages will be appended here -->
+            <div id="chat-messages">
             {% for message in messages %}
-                <div>{{ message.sender.username }}: {{ message.message }}</div>
+                <div>({{ message.timestamp|date:"m/d/y g:iA" }}) {{ message.sender.username }}: {{ message.message }}</div>
+                <br><br>
             {% endfor %}
+            </div>
         </div>
         
         <div class="chat-input">

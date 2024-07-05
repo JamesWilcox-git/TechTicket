@@ -6,6 +6,12 @@
     <title>Normal Dashboard</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body a {
+            color: white !important;         /* Set font color to white */
+            text-decoration: none; /* Remove underline */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -17,7 +23,9 @@
             <button onclick="window.location.href='{% url 'view_tickets'  %}'">View Tickets</button>
         </div>
         <div class="button-container">
+            <button>
             <a href="{% url 'chat_room' room_name='general' %}">Go to Chat</a>
+            </button>
         </div>
         <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
     </div>
