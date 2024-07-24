@@ -4,14 +4,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm, TicketForm, ChatMessageForm
 from django.contrib import messages
-from .models import CustomUser, Ticket, ChatMessage
+from django.http import JsonResponse
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from .forms import CustomUserCreationForm, TicketForm, WorkHourForm
+from .models import CustomUser, Ticket, WorkHour, ChatMessage
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 from django.http import HttpResponse
 
-# welcome/home screen
+# Welcome/home screen
 def welcome(request):
     return render(request, 'welcome.html')
 
-# login screen
+# Login screen
 def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -35,11 +44,9 @@ def user_logout(request):
     logout(request)
     return redirect('welcome')
 
-# signup screen
+# Signup screen
 def signup(request):
-    user_type = None
-    if request.user.is_authenticated:
-        user_type = request.user.user_type
+    user_type = request.user.user_type if request.user.is_authenticated else None
 
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, user=request.user)
@@ -50,56 +57,43 @@ def signup(request):
                 return redirect('admin_dashboard')
             elif user.user_type == 'employee':
                 return redirect('employee_dashboard')
-            elif user.user_type == 'normal':
+            else:
                 return redirect('normal_dashboard')
         else:
             messages.error(request, "Error creating account. Please try again.")
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request,error)
     else:
         form = CustomUserCreationForm(user=request.user)
 
     return render(request, 'signup.html', {'form': form, 'user_type': user_type})
 
-@login_required # only logged in users should access this
+@login_required
 def admin_dashboard(request):
-     # only admin users can access this view
     if request.user.user_type != 'admin':
-        logout(request) # log out user since they are redirected to login page
+        logout(request)
         return redirect('login')
-    username = request.user.username
-    return render(request, 'admin_dashboard.html', {'username': username})
+    return render(request, 'admin_dashboard.html', {'username': request.user.username})
 
-@login_required # only logged in users should access this
+@login_required
 def employee_dashboard(request):
-     # only employee users can access this view
     if request.user.user_type != 'employee':
-        logout(request) # log out user since they are redirected to login page
+        logout(request)
         return redirect('login')
-    username = request.user.username
-    return render(request, 'employee_dashboard.html', {'username': username})
+    return render(request, 'employee_dashboard.html', {'username': request.user.username})
 
-@login_required # only logged in users should access this
+@login_required
 def employee_view_tickets(request):
-    # only employee users can access this view
     if request.user.user_type != 'employee':
-        logout(request) # log out user since they are redirected to login page
+        logout(request)
         return redirect('login')
-    user = request.user
-    tickets = Ticket.objects.filter(assigned_employee_id = user.id)
-    username = user.username
-    return render(request, 'employee_view_tickets.html', {'username': username, 'tickets': tickets})
+    tickets = Ticket.objects.filter(assigned_employee=request.user)
+    return render(request, 'employee_view_tickets.html', {'username': request.user.username, 'tickets': tickets})
 
-@login_required # only logged in users should access this
+@login_required
 def normal_dashboard(request):
-    # only normal users can access this view
-    user = request.user
-    if user.user_type != 'normal':
-        logout(request) # log out user since they are redirected to login page
+    if request.user.user_type != 'normal':
+        logout(request)
         return redirect('login')
-    username = user.username
-    return render(request, 'normal_dashboard.html', {'username': username})
+    return render(request, 'normal_dashboard.html', {'username': request.user.username})
 
 @login_required # only logged in users should access this
 def admin_calendar(request):
@@ -110,14 +104,14 @@ def admin_calendar(request):
         return redirect('login')
     return render(request, 'admin_calendar.html', {'user': user})
 
-@login_required # only logged in users should access this
-def employee_calendar(request):
-    # only employees users can access this view
-    user = request.user
-    if user.user_type != 'employee':
-        logout(request) # log out user since they are redirected to login page
+@login_required
+def employee_hours(request):
+    if request.user.user_type != 'employee':
         return redirect('login')
-    return render(request, 'employee_calendar.html', {'user': user})
+    
+    employee_name = request.user.username
+    work_hours = WorkHour.objects.filter(employee=employee_name)
+    return render(request, 'employee_hours.html', {'work_hours': work_hours, 'user_type': request.user.user_type})
 
 @login_required # only logged in users should access this
 # live chat screen
@@ -125,63 +119,51 @@ def chat_room(request, room_name):
     user = request.user
     return render(request, 'chat.html', {'room_name': room_name, 'user': user})
 
-@login_required # only logged in users should access this
+@login_required
 def ticket_request(request):
     if request.method == 'POST':
         form = TicketForm(request.POST)
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
-            # !!!
-            # change this when we start implementing the auto-assignment stuff
-            # this is hard-coded: always assigns tickets to employeetest3
-            ticket.assigned_employee_id = get_user("employeetest3").id
+            ticket.assigned_employee = get_user("employeetest3")
             ticket.status = "open"
             ticket.time_estimate = 0
             ticket.time_spent = 0
             ticket.save()
             messages.success(request, 'Ticket submitted successfully!')
-            return redirect('ticket_request')  # Redirect to the same page to show the message
+            return redirect('ticket_request')
         else:
             messages.error(request, 'Error submitting ticket. Please try again.')
     else:
         form = TicketForm()
     return render(request, 'ticket_request.html', {'form': form})
 
-# normal user ticket view screen
 @login_required
 def view_tickets(request):
     tickets = Ticket.objects.filter(user=request.user)
     return render(request, 'view_tickets.html', {'tickets': tickets})
 
-# ticket info screen
 @login_required
 def achat_ticket(request, ticket_id):
-    # admins can see any ticket, normal/employee users can only see their own tickets
     current_user = request.user
-    ticket_user_id = Ticket.objects.get(id=ticket_id).user.id
-    ticket_assigned_e_id = Ticket.objects.get(id=ticket_id).assigned_employee.id
-    if current_user.user_type == 'normal' and current_user.id != ticket_user_id:
-        logout(request) # log out user since they are redirected to login page
+    ticket = Ticket.objects.get(id=ticket_id)
+    if current_user.user_type == 'normal' and current_user != ticket.user:
+        logout(request)
         return redirect('login')
-    elif current_user.user_type == 'employee' and current_user.id != ticket_assigned_e_id:
-        logout(request) # log out user since they are redirected to login page
+    elif current_user.user_type == 'employee' and current_user != ticket.assigned_employee:
+        logout(request)
         return redirect('login') 
     ticket = Ticket.objects.get(id=ticket_id)
     messages = ChatMessage.objects.filter(ticket_id=ticket_id)
     return render(request, 'achat_ticket.html', {'ticket': ticket, 'current_user': current_user, 'messages': messages})
 
-
-
-# ---------------------------- helper functions ----------------------------------------------
 def get_user(username):
     try:
-        user = CustomUser.objects.get(username=username)
-        return user
-    except:
+        return CustomUser.objects.get(username=username)
+    except CustomUser.DoesNotExist:
         print("Error: User does not exist")
         return None
-
 
 def update_ticket_status(request, ticket_id):
     if request.method == 'POST':
@@ -189,8 +171,7 @@ def update_ticket_status(request, ticket_id):
         ticket = Ticket.objects.get(id=ticket_id)
         ticket.status = status
         ticket.save()
-        return redirect('employee_view_tickets')  # Adjust redirect as needed
-
+        return redirect('employee_view_tickets')
 
 def update_ticket_time_estimate(request, ticket_id):
     if request.method == 'POST':
@@ -198,7 +179,7 @@ def update_ticket_time_estimate(request, ticket_id):
         ticket = Ticket.objects.get(id=ticket_id)
         ticket.time_estimate = float(time_estimate)
         ticket.save()
-        return redirect('employee_view_tickets')  # Adjust redirect as needed
+        return redirect('employee_view_tickets')
     
 def update_ticket_time_spent(request, ticket_id):
     if request.method == 'POST':
@@ -206,7 +187,58 @@ def update_ticket_time_spent(request, ticket_id):
         ticket = Ticket.objects.get(id=ticket_id)
         ticket.time_spent = float(time_spent)
         ticket.save()
-        return redirect('employee_view_tickets')  # Adjust redirect as needed
+        return redirect('employee_view_tickets')
+
+@login_required
+@csrf_exempt
+def add_work_hour(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            form = WorkHourForm(data)
+            if form.is_valid():
+                form.save()
+                return JsonResponse({'success': 'Work hours saved successfully!'})
+            else:
+                logger.error("Form errors: %s", form.errors)
+                return JsonResponse({'error': 'Invalid data', 'details': form.errors}, status=400)
+        except json.JSONDecodeError as e:
+            logger.error("JSON decode error: %s", str(e))
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            logger.error("Unexpected error: %s", str(e))
+            return JsonResponse({'error': 'Unexpected error'}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@login_required
+def view_work_hours_json(request, date):
+    if request.user.user_type != 'admin':
+        logout(request)
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+    work_hours = WorkHour.objects.filter(date=date).values('employee', 'start_time', 'end_time')
+    return JsonResponse({'work_hours': list(work_hours)})
+
+@csrf_exempt
+@login_required
+def clear_work_hours(request, date):
+    if request.user.user_type != 'admin':
+        logout(request)
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+    WorkHour.objects.filter(date=date).delete()
+    return JsonResponse({'success': 'Work hours cleared'})
+
+@login_required
+def view_employee_hours(request):
+    if request.user.user_type != 'employee':
+        return redirect('login')
+    
+    employee_name = request.user.username
+    work_hours = WorkHour.objects.filter(employee=employee_name)
+    return render(request, 'employee_hours.html', {'work_hours': work_hours, 'user_type': request.user.user_type})
+
+
     
 @login_required
 def save_chat_message(request, ticket_id):

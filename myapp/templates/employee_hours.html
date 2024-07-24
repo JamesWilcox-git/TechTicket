@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigned Hours</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <h2>Assigned Work Hours</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work_hour in work_hours %}
+                <tr>
+                    <td>{{ work_hour.date }}</td>
+                    <td>{{ work_hour.start_time }}</td>
+                    <td>{{ work_hour.end_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button class="back-button" onclick="window.location.href='{% if user_type == 'admin' %}{% url 'admin_dashboard' %}{% else %}{% url 'employee_dashboard' %}{% endif %}'">Back</button>
+    </div>
+</body>
+</html>

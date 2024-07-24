@@ -43,6 +43,46 @@
         .month-nav button.right {
             right: 25%; /* Position for right button */
         }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .slot {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            color: black; /* Added to make text black */
+            background-color: white; /* Ensure background is white for contrast */
+        }
     </style>
 </head>
 <body>
@@ -56,7 +96,24 @@
         <div id="calendar" class="calendar-grid"></div>
         <button type="button" onclick="window.location.href='{% url 'admin_dashboard' %}'">Back</button>
     </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Work Hours for <span id="modal-date"></span></h2>
+            <div id="work-hours-slots">
+                <!-- Slots for displaying work hours -->
+            </div>
+            <button id="add-hours-btn">Add New Employee Hours</button>
+            <button id="clear-hours-btn">Clear All Employee Hours</button>
+        </div>
+    </div>
+
     <script>
+        let currentMonth = new Date().getMonth() + 1;
+        let currentYear = new Date().getFullYear();
+
         function loadCalendarDays(month, year) {
             const calendar = document.getElementById('calendar');
             const monthDisplay = document.getElementById('month-display');
@@ -74,7 +131,7 @@
                 const dayDiv = document.createElement('div');
                 dayDiv.className = 'day';
                 dayDiv.innerText = day;
-                dayDiv.onclick = function() { editDayHours(day); };
+                dayDiv.onclick = function() { openModal(day, month, year); };
 
                 // Highlight today
                 const today = new Date();
@@ -86,24 +143,105 @@
             }
         }
 
-        function editDayHours(day) {
-            const monthYearText = document.getElementById('month-display').innerText;  // get month and year
-            const monthYearArray = monthYearText.split(" ");
-            const month = monthYearArray[0];  // The month
-            const year = monthYearArray[1];  // The year
+        function openModal(day, month, year) {
+            const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            document.getElementById('modal-date').innerText = date;
+            loadWorkHours(date);
+            document.getElementById('myModal').style.display = "block";
 
-            const employeeNamePrompt = `Enter Employee Name for ${month} ${day}, ${year}`;
-            const hoursPrompt = `Enter hours for ${month} ${day}, ${year}`;
+            document.getElementById('add-hours-btn').onclick = function() { addWorkHour(date); };
+            document.getElementById('clear-hours-btn').onclick = function() { clearWorkHours(date); };
+        }
 
-            const employeeName = prompt(employeeNamePrompt);
-            const hours = prompt(hoursPrompt);
+        function loadWorkHours(date) {
+            // Fetch work hours from the server
+            fetch(`/work_hours/${date}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const slotsContainer = document.getElementById('work-hours-slots');
+                    slotsContainer.innerHTML = ''; // Clear existing slots
+                    data.work_hours.forEach(work_hour => {
+                        const slot = document.createElement('div');
+                        slot.className = 'slot';
+                        slot.innerText = `${work_hour.employee}: ${work_hour.start_time} - ${work_hour.end_time}`;
+                        slotsContainer.appendChild(slot);
+                    });
+                });
+        }
 
-            // save this data back to the server here
+        function addWorkHour(date) {
+            const employeeName = prompt(`Enter employee name for ${date}`);
+            const startTime = prompt(`Enter start time (HH:MM) for ${date}`);
+            const endTime = prompt(`Enter end time (HH:MM) for ${date}`);
+
+            if (employeeName && startTime && endTime) {
+                fetch("{% url 'add_work_hour' %}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ 
+                        employee: employeeName,
+                        date: date, 
+                        start_time: `${startTime}:00`,
+                        end_time: `${endTime}:00`
+                    })
+                }).then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          alert(data.success);
+                          loadWorkHours(date); // Reload work hours to reflect the new addition
+                      } else {
+                          alert('Error saving hours: ' + JSON.stringify(data.details));
+                      }
+                  })
+                  .catch(error => alert('Error: ' + error));
+            }
+        }
+
+        function clearWorkHours(date) {
+            fetch(`/clear_work_hours/${date}/`, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('Hours cleared successfully!');
+                    loadWorkHours(date); // Reload work hours to reflect the clearance
+                } else {
+                    alert('Error clearing hours');
+                }
+            });
+        }
+
+        function changeMonth(offset) {
+            currentMonth += offset;
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            } else if (currentMonth < 1) {
+                currentMonth = 12;
+                currentYear--;
+            }
+            loadCalendarDays(currentMonth, currentYear);
         }
 
         // Initialize calendar for current month and year
-        const today = new Date();
-        loadCalendarDays(today.getMonth() + 1, today.getFullYear());
+        loadCalendarDays(currentMonth, currentYear);
+
+        // Close the modal when the user clicks on <span> (x)
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        // Close the modal when the user clicks anywhere outside of the modal
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('myModal')) {
+                document.getElementById('myModal').style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser, Ticket, ChatMessage
+from .models import CustomUser, Ticket, ChatMessage, WorkHour
 
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -12,7 +12,7 @@ class CustomUserCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        if user.is_authenticated and user.user_type == 'admin':
+        if user and user.is_authenticated and user.user_type == 'admin':
             self.fields['user_type'].choices = CustomUser.USER_TYPE_CHOICES
         else:
             self.fields['user_type'].choices = [
@@ -32,7 +32,7 @@ class CustomUserCreationForm(forms.ModelForm):
         if self.cleaned_data["user_type"] == "admin":
             user.is_superuser = True
             user.is_staff = True
-        if self.cleaned_data["user_type"] == "employee":
+        elif self.cleaned_data["user_type"] == "employee":
             user.is_staff = True
         if commit:
             user.save()
@@ -45,6 +45,39 @@ class TicketForm(forms.ModelForm):
         widgets = {
             'category': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+class WorkHourForm(forms.ModelForm):
+    class Meta:
+        model = WorkHour
+        fields = ['employee', 'date', 'start_time', 'end_time']
+        widgets = {
+            'employee': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+        }
+
+class WorkHourForm(forms.ModelForm):
+    class Meta:
+        model = WorkHour
+        fields = ['employee', 'date', 'start_time', 'end_time']
+        widgets = {
+            'employee': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+        }
+
+class WorkHourForm(forms.ModelForm):
+    class Meta:
+        model = WorkHour
+        fields = ['employee', 'date', 'start_time', 'end_time']
+        widgets = {
+            'employee': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
         }
 
 class ChatMessageForm(forms.ModelForm):

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Work Hour</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Add Work Hour</h2>
+        <!-- This form is for manual submission if needed -->
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+        <button type="button" onclick="window.location.href='{% url 'calendar' %}'">Back to Calendar</button>
+    </div>
+
+    <!-- This script handles the AJAX-based form submission -->
+    <script>
+        function addWorkHour(date) {
+            const employeeName = prompt(`Enter employee name for ${date}`);
+            const startTime = prompt(`Enter start time (HH:MM) for ${date}`);
+            const endTime = prompt(`Enter end time (HH:MM) for ${date}`);
+
+            if (employeeName && startTime && endTime) {
+                fetch("{% url 'add_work_hour' %}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ 
+                        employee: employeeName,
+                        date: date, 
+                        start_time: `${startTime}:00`,
+                        end_time: `${endTime}:00`
+                    })
+                }).then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          alert(data.success);
+                          loadWorkHours(date); // Reload work hours to reflect the new addition
+                      } else {
+                          alert('Error saving hours: ' + JSON.stringify(data.details));
+                      }
+                  })
+                  .catch(error => alert('Error: ' + error));
+            }
+        }
+    </script>
+</body>
+</html>

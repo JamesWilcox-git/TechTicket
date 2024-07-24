@@ -10,7 +10,7 @@ urlpatterns = [
     path('employee_dashboard/', views.employee_dashboard, name='employee_dashboard'),
     path('normal_dashboard/', views.normal_dashboard, name='normal_dashboard'),
     path('admin_calendar/', views.admin_calendar, name='admin_calendar'),
-    path('employee_calendar/', views.employee_calendar, name='employee_calendar'),
+    path('employee_hours/', views.employee_hours, name='employee_hours'),
     path('chat/<str:room_name>/', views.chat_room, name='chat_room'),
     path('ticket_request/', views.ticket_request, name='ticket_request'),
     path('employee_view_tickets/', views.employee_view_tickets, name='employee_view_tickets'),
@@ -20,4 +20,7 @@ urlpatterns = [
     path('update_ticket_status/<int:ticket_id>/', views.update_ticket_status, name='update_ticket_status'),
     path('update_ticket_time_estimate/<int:ticket_id>/', views.update_ticket_time_estimate, name='update_ticket_time_estimate'),
     path('update_ticket_time_spent/<int:ticket_id>/', views.update_ticket_time_spent, name='update_ticket_time_spent'),
+    path('work_hours/<str:date>/', views.view_work_hours_json, name='view_work_hours_json'),
+    path('clear_work_hours/<str:date>/', views.clear_work_hours, name='clear_work_hours'),
+    path('add_work_hour/', views.add_work_hour, name='add_work_hour'),
 ]
