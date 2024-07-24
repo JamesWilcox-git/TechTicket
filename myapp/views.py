@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from .forms import CustomUserCreationForm, TicketForm, WorkHourForm
 from .models import CustomUser, Ticket, WorkHour, ChatMessage
+from datetime import datetime
 import json
 import logging
 
@@ -119,6 +120,23 @@ def chat_room(request, room_name):
     user = request.user
     return render(request, 'chat.html', {'room_name': room_name, 'user': user})
 
+def get_available_employee():
+    now = timezone.now()  # current date and time (used to make sure we only get future work hours)
+    now_datetime = datetime.combine(now.date(), now.time())
+    workhour_data = WorkHour.objects.all()
+    available_workhours = [
+        wh for wh in workhour_data
+        if datetime.combine(wh.date, wh.end_time) >= now_datetime]
+    
+    # order by end time
+    available_workhours.sort(key=lambda wh: datetime.combine(wh.date, wh.end_time))
+    if not available_workhours:
+        return "admintest1"  # no employee available --> assign to admin
+
+    earliest_workhour = available_workhours[0]
+    earliest_employee = earliest_workhour.employee
+    return earliest_employee
+
 @login_required
 def ticket_request(request):
     if request.method == 'POST':
@@ -126,7 +144,9 @@ def ticket_request(request):
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
-            ticket.assigned_employee = get_user("employeetest3")
+            # auto assignment of ticket to employee
+            assigned_employee_username = get_available_employee()
+            ticket.assigned_employee_id = get_user(assigned_employee_username).id
             ticket.status = "open"
             ticket.time_estimate = 0
             ticket.time_spent = 0
