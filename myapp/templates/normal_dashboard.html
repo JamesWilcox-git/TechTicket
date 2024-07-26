@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Normal Dashboard</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Normal Dashboard</title>
+   {% load static %}
+   <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <div class="container">
-        <h2> Hello, {{ username }}</h2>
-        <div class="button-container">
-            <button onclick="window.location.href='{% url 'ticket_request' %}'">Submit Ticket</button>
-        </div>
-        <div class="button-container">
-            <button onclick="window.location.href='{% url 'view_tickets'  %}'">View Tickets</button>
-        </div>
-        <div class="button-container">
-            <button onclick="window.location.href='{% url 'live_chat' %}'">Live Chat</button>
-        </div>
-        <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
-    </div>
+   <div class="container">
+       <h2> Hello, {{ username }}</h2>
+       <div class="button-container">
+           <button onclick="window.location.href='{% url 'ticket_request' %}'">Submit Ticket</button>
+       </div>
+       <div class="button-container">
+           <button onclick="window.location.href='{% url 'view_tickets' %}'">View Tickets</button>
+       </div>
+       <div class="button-container">
+           <button onclick="window.location.href='{% url 'live_chat' %}'">Live Chat</button>
+       </div>
+       <div class="button-container">
+           <button onclick="window.location.href='{% url 'profile' %}'">Profile</button>
+       </div>
+       <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+   </div>
 </body>
 </html>
+
+

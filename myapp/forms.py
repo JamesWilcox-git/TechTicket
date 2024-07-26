@@ -1,5 +1,6 @@
 from django import forms
 from .models import CustomUser, Ticket, WorkHour
+from django.contrib.auth.forms import PasswordChangeForm
 
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -57,3 +58,17 @@ class WorkHourForm(forms.ModelForm):
             'start_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
             'end_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
         }
+
+class ProfileUpdateForm(forms.ModelForm):
+   class Meta:
+       model = CustomUser
+       fields = ['username', 'email']
+       widgets = {
+           'username': forms.TextInput(attrs={'class': 'form-control'}),
+           'email': forms.EmailInput(attrs={'class': 'form-control'}),
+       }
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+   old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+   new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+   new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
