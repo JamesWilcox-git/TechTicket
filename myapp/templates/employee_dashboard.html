@@ -15,7 +15,22 @@
 </head>
 <body>
     <div class="container">
+
         <h2> Hello, {{ username }}</h2>
+
+        {% if notifications %}
+            <div class="notification">
+                <p>You have new notifications:</p>
+                <ul>
+                    {% for notification in notifications %}
+                        <li>Ticket #{{ notification.ticket.id }} requires a time estimate.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p>No new notifications.</p>
+        {% endif %}
+
         <div class="button-container">
             <button onclick="window.location.href='{% url 'employee_view_tickets' %}'">View Assigned Tickets</button>
         </div>

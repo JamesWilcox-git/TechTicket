@@ -41,7 +41,13 @@
                         </select>
                     </form>
                 </td>
-                <td class="rounded-header-middle">{{ ticket.time_estimate }}</td>
+                <td class="rounded-header-middle">
+                    <form method="post" action="{% url 'update_ticket_time_estimate' ticket.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="time_estimate" value="{{ ticket.time_estimate }}" step="0.5" min="0">
+                        <button class="button-submit">Update</button>
+                    </form>
+                </td>
                 <td class="rounded-header-middle">
                     <form method="post" action="{% url 'update_ticket_time_spent' ticket.id %}">
                         {% csrf_token %}

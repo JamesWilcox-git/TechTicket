@@ -250,3 +250,10 @@ button {
     background-color: #3a3f44;
     color: white;
 }
+
+.notification {
+    text-align: Left;
+    margin-bottom: 5%;
+    padding: 20px;
+    color: white;
+}

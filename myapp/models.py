@@ -44,6 +44,11 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{self.get_category_display()} - {self.user.username}"
 
+class TicketNotification(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    notified_employee = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    is_resolved = models.BooleanField(default=False)
+
 class ChatMessage(models.Model):
     sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     ticket_id = models.IntegerField()

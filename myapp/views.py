@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from .forms import CustomUserCreationForm, TicketForm, WorkHourForm
-from .models import CustomUser, Ticket, WorkHour, ChatMessage
+from .models import CustomUser, Ticket, WorkHour, ChatMessage, TicketNotification
 from datetime import datetime
 import json
 import logging
@@ -79,7 +79,9 @@ def employee_dashboard(request):
     if request.user.user_type != 'employee':
         logout(request)
         return redirect('login')
-    return render(request, 'employee_dashboard.html', {'username': request.user.username})
+    notifications = TicketNotification.objects.filter(notified_employee=request.user, is_resolved=False)
+    print(notifications)
+    return render(request, 'employee_dashboard.html', {'username': request.user.username, 'notifications': notifications})
 
 @login_required
 def employee_view_tickets(request):
@@ -160,6 +162,7 @@ def ticket_request(request):
             ticket.time_estimate = 0
             ticket.time_spent = 0
             ticket.save()
+            TicketNotification.objects.create(ticket=ticket, notified_employee=get_user(assigned_employee_username))
             messages.success(request, 'Ticket submitted successfully!')
             return redirect('ticket_request')
         else:
@@ -224,6 +227,8 @@ def update_ticket_time_estimate(request, ticket_id):
         ticket = Ticket.objects.get(id=ticket_id)
         ticket.time_estimate = float(time_estimate)
         ticket.save()
+        notifications = TicketNotification.objects.filter(ticket=ticket)
+        notifications.update(is_resolved=True)
         return redirect('employee_view_tickets')
     
 def update_ticket_time_spent(request, ticket_id):
