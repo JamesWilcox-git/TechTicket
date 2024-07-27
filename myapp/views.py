@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -106,6 +106,15 @@ def admin_calendar(request):
     return render(request, 'admin_calendar.html', {'user': user})
 
 @login_required
+def admin_view_tickets(request):
+    if request.user.user_type != 'admin':
+        logout(request)
+        return redirect('login')
+    tickets = Ticket.objects.all()
+    employees = CustomUser.objects.filter(user_type='employee')
+    return render(request, 'admin_view_tickets.html', {'tickets': tickets, 'employees': employees})
+
+@login_required
 def employee_hours(request):
     if request.user.user_type != 'employee':
         return redirect('login')
@@ -184,6 +193,22 @@ def get_user(username):
     except CustomUser.DoesNotExist:
         print("Error: User does not exist")
         return None
+
+def update_ticket_assigned_employee(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    
+    if request.method == 'POST':
+        assigned_employee_id = request.POST.get('assigned_employee')
+        if assigned_employee_id:
+            assigned_employee = get_object_or_404(CustomUser, id=assigned_employee_id)
+            ticket.assigned_employee = assigned_employee
+            ticket.save()
+            return redirect('admin_view_tickets')
+    
+    return render(request, 'your_template.html', {
+        'ticket': ticket,
+        'employees': CustomUser.objects.all(),
+    })
 
 def update_ticket_status(request, ticket_id):
     if request.method == 'POST':

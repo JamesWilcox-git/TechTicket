@@ -17,10 +17,12 @@ urlpatterns = [
     path('view_tickets/', views.view_tickets, name='view_tickets'),
     path('ticket/<int:ticket_id>/', views.achat_ticket, name='achat_ticket'),
     path('save_chat_message/<int:ticket_id>', views.save_chat_message, name='save_chat_message'),
+    path('update_ticket_assigned_employee/<int:ticket_id>/', views.update_ticket_assigned_employee, name='update_ticket_assigned_employee'),
     path('update_ticket_status/<int:ticket_id>/', views.update_ticket_status, name='update_ticket_status'),
     path('update_ticket_time_estimate/<int:ticket_id>/', views.update_ticket_time_estimate, name='update_ticket_time_estimate'),
     path('update_ticket_time_spent/<int:ticket_id>/', views.update_ticket_time_spent, name='update_ticket_time_spent'),
     path('work_hours/<str:date>/', views.view_work_hours_json, name='view_work_hours_json'),
     path('clear_work_hours/<str:date>/', views.clear_work_hours, name='clear_work_hours'),
     path('add_work_hour/', views.add_work_hour, name='add_work_hour'),
+    path('admin_view_tickets/', views.admin_view_tickets, name='admin_view_tickets'),
 ]

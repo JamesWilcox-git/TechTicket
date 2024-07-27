@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Ticket Table</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+<div class="container">
+    <h2> All Tickets</h2>
+    <table class="ticket-table">
+        <thead>
+            <tr>
+                <th class="rounded-header-left">Ticket ID</th>
+                <th class="rounded-header-middle"> Assigned Employee</th>
+                <th class="rounded-header-middle">Ticket User</th>
+                <th class="rounded-header-middle">Category</th>
+                <th class="rounded-header-middle">Description</th>
+                <th class="rounded-header-middle">Status</th>
+                <th class="rounded-header-middle">Time Estimate (Hrs)</th>
+                <th class="rounded-header-right">Time Spent (Hrs)</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for ticket in tickets %}
+            <tr>
+                <td class="rounded-header-left">{{ ticket.id }}</td>
+                <td class="rounded-header-middle">
+                    <form method="post" action="{% url 'update_ticket_assigned_employee' ticket.id %}">
+                        {% csrf_token %}
+                        <select name="assigned_employee" onchange="this.form.submit()">
+                            {% for employee in employees %}
+                                <option value="{{ employee.id }}" {% if ticket.assigned_employee and ticket.assigned_employee.id == employee.id %} selected {% endif %}>
+                                    {{ employee.username }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </td>
+                <td class="rounded-header-middle">{{ ticket.user.username }}</td>
+                <td class="rounded-header-middle">{{ ticket.category }}</td>
+                <td class="rounded-header-middle">{{ ticket.description }}</td>
+                <td class="rounded-header-middle">
+                    <form method="post" action="{% url 'update_ticket_status' ticket.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                        <select name="status" onchange="this.form.submit()">
+                            <option value="open" {% if ticket.status == "open" %} selected {% endif %}>Open</option>
+                            <option value="in_progress" {% if ticket.status == "in_progress" %} selected {% endif %}>In Progress</option>
+                            <option value="closed" {% if ticket.status == "closed" %} selected {% endif %}>Closed</option>
+                        </select>
+                    </form>
+                </td>
+                <td class="rounded-header-middle">{{ ticket.time_estimate }}</td>
+                <td class="rounded-header-middle">
+                    <form method="post" action="{% url 'update_ticket_time_spent' ticket.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="time_spent" value="{{ ticket.time_spent }}" step="0.5" min="0">
+                        <button class="button-submit">Update</button>
+                    </form>
+                </td>
+                <td class="rounded-header-right">
+                    <a href="{% url 'achat_ticket' ticket.id %}">View Ticket</a>
+                </td>
+                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No tickets found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="back-button" onclick="window.location.href='{% url 'admin_dashboard' %}'">Back</button>
+</div>
+</body>
+</html>
