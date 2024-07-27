@@ -84,3 +84,13 @@ class ChatMessageForm(forms.ModelForm):
     class Meta:
         model = ChatMessage
         fields = ['message']
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField()
+    username = forms.CharField(max_length=150)
+
+class ResetPasswordForm(forms.Form):
+    email = forms.EmailField(widget=forms.HiddenInput())
+    username = forms.CharField(max_length=150, widget=forms.HiddenInput())
+    new_password = forms.CharField(widget=forms.PasswordInput())

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,7 +9,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-from .forms import CustomUserCreationForm, TicketForm, WorkHourForm
+from .forms import CustomUserCreationForm, TicketForm, WorkHourForm, ResetPasswordForm, ForgotPasswordForm
 from .models import CustomUser, Ticket, WorkHour, ChatMessage, TicketNotification
 from datetime import datetime
 import json
@@ -44,6 +45,47 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('welcome')
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            username = form.cleaned_data['username']
+            if not CustomUser.objects.filter(email=email, username=username).exists():
+                messages.error(request, "User does not exist. Please try again.")
+                return redirect('forgot_password')
+            else:
+                return redirect(reverse('reset_password', kwargs={'email': email, 'username': username}))
+    else:
+        form = ForgotPasswordForm()
+
+    return render(request, 'forgot_password.html', {'form': form})
+
+def reset_password(request, email, username):
+    if request.method == 'POST':
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            user = CustomUser.objects.get(email=email, username=username)
+            user.set_password(new_password)
+            user.save()
+            print(f"Resetting password for {username} ({email}) to {new_password}")
+            return redirect('password_reset_done')
+    else:
+        form = ResetPasswordForm(initial={'email': email, 'username': username})
+
+    return render(request, 'reset_password.html', {'form': form, 'email': email, 'username': username})
+
+def password_reset_done(request):
+    return render(request, 'password_reset_done.html')
+
+
+
+
+
+
 
 # Signup screen
 def signup(request):
