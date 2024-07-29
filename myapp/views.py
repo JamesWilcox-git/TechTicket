@@ -229,33 +229,31 @@ def view_employee_hours(request):
 
 @login_required
 def profile(request):
-   if request.method == 'POST':
-       if 'change_password' in request.POST:
-           password_form = CustomPasswordChangeForm(request.user, request.POST)
-           profile_form = ProfileUpdateForm(instance=request.user) 
-           if password_form.is_valid():
-               user = password_form.save()
-               update_session_auth_hash(request, user)  
-               messages.success(request, 'Your password was successfully updated!')
-               return redirect('profile')
-           else:
-               messages.error(request, 'Please correct the error below.')
-       else:
-           profile_form = ProfileUpdateForm(request.POST, instance=request.user)
-           password_form = CustomPasswordChangeForm(request.user)  
-           if profile_form.is_valid():
-               profile_form.save()
-               messages.success(request, 'Your profile was successfully updated!')
-               return redirect('profile')
-           else:
-               messages.error(request, 'Please correct the error below.')
-   else:
-       password_form = CustomPasswordChangeForm(request.user)
-       profile_form = ProfileUpdateForm(instance=request.user)
-  
-   return render(request, 'profile.html', {
-       'password_form': password_form,
-       'profile_form': profile_form,
-   })
+    if request.method == 'POST':
+        if 'change_password' in request.POST:
+            password_form = CustomPasswordChangeForm(request.user, request.POST)
+            profile_form = ProfileUpdateForm(instance=request.user)  
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+            password_form = CustomPasswordChangeForm(request.user) 
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Your profile was successfully updated!')
+                return redirect('profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+    else:
+        password_form = CustomPasswordChangeForm(request.user)
+        profile_form = ProfileUpdateForm(instance=request.user)
 
-
+    return render(request, 'profile.html', {
+        'password_form': password_form,
+        'profile_form': profile_form,
+    })

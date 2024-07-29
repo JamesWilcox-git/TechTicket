@@ -62,13 +62,22 @@ class WorkHourForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
    class Meta:
        model = CustomUser
-       fields = ['username', 'email']
+       fields = ('username', 'email', 'profile_picture')
        widgets = {
            'username': forms.TextInput(attrs={'class': 'form-control'}),
            'email': forms.EmailInput(attrs={'class': 'form-control'}),
        }
 
 class CustomPasswordChangeForm(PasswordChangeForm):
-   old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-   new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-   new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Current Password"
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="New Password"
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Confirm New Password"
+    )
