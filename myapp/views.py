@@ -173,21 +173,39 @@ def chat_room(request, room_name):
     user = request.user
     return render(request, 'chat.html', {'room_name': room_name, 'user': user})
 
+# used for auto assignment of tickets to employees
 def get_available_employee():
-    now = timezone.now()  # current date and time (used to make sure we only get future work hours)
-    now_datetime = datetime.combine(now.date(), now.time())
+    now_datetime = datetime.now()  # Current date and time
     workhour_data = WorkHour.objects.all()
+    # Filter out work hours that are currently open
     available_workhours = [
         wh for wh in workhour_data
-        if datetime.combine(wh.date, wh.end_time) >= now_datetime]
-    
-    # order by end time
-    available_workhours.sort(key=lambda wh: datetime.combine(wh.date, wh.end_time))
-    if not available_workhours:
+        if datetime.combine(wh.date, wh.start_time) <= now_datetime <= datetime.combine(wh.date, wh.end_time)
+    ]
+    # Sort the available work hours by start time
+    sorted_workhours = sorted(available_workhours, key=lambda wh: datetime.combine(wh.date, wh.start_time))
+    if sorted_workhours:
+        earliest_workhour = sorted_workhours[0]
+    else:
         return "admintest1"  # no employee available --> assign to admin
 
-    earliest_workhour = available_workhours[0]
+
+    print("Date for auto assignment: ")
+    print()
+    print("Available work hours:")
+    print(available_workhours)
+    print("Sorted work hours:")
+    print(sorted_workhours)
+    print()
+    print("Earliest work hour:")
+    print(earliest_workhour)
+
+
+    # if the employee has 5 or more tickets assigned, assign to admin
+    if earliest_workhour.num_tickets_assigned > 5:
+        return "admintest1"
     earliest_employee = earliest_workhour.employee
+    earliest_workhour.num_tickets_assigned += 1
     return earliest_employee
 
 @login_required
