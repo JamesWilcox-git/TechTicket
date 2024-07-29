@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-from .forms import CustomUserCreationForm, TicketForm, WorkHourForm
+from .forms import CustomUserCreationForm, TicketForm, WorkHourForm, ProfileUpdateForm, CustomPasswordChangeForm
 from .models import CustomUser, Ticket, WorkHour
 import json
 import logging
@@ -226,3 +227,33 @@ def view_employee_hours(request):
     work_hours = WorkHour.objects.filter(employee=employee_name)
     return render(request, 'employee_hours.html', {'work_hours': work_hours, 'user_type': request.user.user_type})
 
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        if 'change_password' in request.POST:
+            password_form = CustomPasswordChangeForm(request.user, request.POST)
+            profile_form = ProfileUpdateForm(instance=request.user)  
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+            password_form = CustomPasswordChangeForm(request.user) 
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Your profile was successfully updated!')
+                return redirect('profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+    else:
+        password_form = CustomPasswordChangeForm(request.user)
+        profile_form = ProfileUpdateForm(instance=request.user)
+
+    return render(request, 'profile.html', {
+        'password_form': password_form,
+        'profile_form': profile_form,
+    })
