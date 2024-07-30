@@ -44,6 +44,12 @@ login, logout.
 - python3 -m venv myenv
 - source myenv/bin/activate
 - pip3 install Django
+
+  Run website without chat functionality:
 - python3 manage.py runserver
 - The terminal will say Starting development server at http://127.0.0.1:8000/
 - Copy the link and paste it into Safari (Chrome appears to have issues with colors)
+
+  Run website with chat functionality:
+- daphne -b (replace with ip address) -p 8000 myproject.asgi:application
+- http://(replace with ip address):8000/
