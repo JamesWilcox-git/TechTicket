@@ -28,4 +28,5 @@ urlpatterns = [
     path('clear_work_hours/<str:date>/', views.clear_work_hours, name='clear_work_hours'),
     path('add_work_hour/', views.add_work_hour, name='add_work_hour'),
     path('admin_view_tickets/', views.admin_view_tickets, name='admin_view_tickets'),
+    path('profile/', views.profile, name='profile'), 
 ]

@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
         ('normal', 'Normal User'),
     )
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='normal')
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
 
     def __str__(self):
         return self.username

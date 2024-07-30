@@ -26,9 +26,7 @@
             <button onclick="window.location.href='{% url 'admin_view_tickets' %}'">View Tickets</button>
         </div>
         <div class="button-container">
-            <button>
-            <a href="{% url 'chat_room' room_name='general' %}">Live Chat</a>
-            </button>
+            <button onclick="location.href='{% url 'chat_room' room_name='general' %}'">Live Chat</button>
         </div>
         <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
     </div>

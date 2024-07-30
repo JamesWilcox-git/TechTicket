@@ -1,5 +1,6 @@
 from django import forms
 from .models import CustomUser, Ticket, ChatMessage, WorkHour
+from django.contrib.auth.forms import PasswordChangeForm
 
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -94,3 +95,26 @@ class ResetPasswordForm(forms.Form):
     email = forms.EmailField(widget=forms.HiddenInput())
     username = forms.CharField(max_length=150, widget=forms.HiddenInput())
     new_password = forms.CharField(widget=forms.PasswordInput())
+
+class ProfileUpdateForm(forms.ModelForm):
+   class Meta:
+       model = CustomUser
+       fields = ('username', 'email', 'profile_picture')
+       widgets = {
+           'username': forms.TextInput(attrs={'class': 'form-control'}),
+           'email': forms.EmailInput(attrs={'class': 'form-control'}),
+       }
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Current Password"
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="New Password"
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Confirm New Password"
+    )

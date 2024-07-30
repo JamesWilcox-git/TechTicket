@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm, TicketForm, ChatMessageForm
@@ -9,7 +10,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-from .forms import CustomUserCreationForm, TicketForm, WorkHourForm, ResetPasswordForm, ForgotPasswordForm
+from .forms import CustomUserCreationForm, TicketForm, WorkHourForm, ResetPasswordForm, ForgotPasswordForm, ProfileUpdateForm, CustomPasswordChangeForm
 from .models import CustomUser, Ticket, WorkHour, ChatMessage, TicketNotification
 from datetime import datetime
 import json
@@ -355,13 +356,42 @@ def save_chat_message(request, ticket_id):
     if request.method == 'POST':
         form = ChatMessageForm(request.POST)
         if form.is_valid():
-            # Create a new ChatMessage object but don't save it yet
+            # create a new ChatMessage object
             new_message = form.save(commit=False)
             new_message.sender = request.user
             new_message.ticket_id = ticket_id
-            # Optionally do additional processing here
-            new_message.save()  # Save the message to the database
+            new_message.save()  # Save message to database
             return redirect('achat_ticket', ticket_id=ticket_id)
     else:
         form = ChatMessageForm()
-    return HttpResponse(status=400)  # Respond with HTTP 400 Bad Request if form is invalid or method is not POST
+    return HttpResponse(status=400)
+
+def profile(request):
+    if request.method == 'POST':
+        if 'change_password' in request.POST:
+            password_form = CustomPasswordChangeForm(request.user, request.POST)
+            profile_form = ProfileUpdateForm(instance=request.user)  
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+            password_form = CustomPasswordChangeForm(request.user) 
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Your profile was successfully updated!')
+                return redirect('profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+    else:
+        password_form = CustomPasswordChangeForm(request.user)
+        profile_form = ProfileUpdateForm(instance=request.user)
+
+    return render(request, 'profile.html', {
+        'password_form': password_form,
+        'profile_form': profile_form,
+    })
