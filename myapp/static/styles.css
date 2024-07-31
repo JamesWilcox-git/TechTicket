@@ -1,16 +1,73 @@
+/* General Styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, rgb(255, 94, 0), #2575fc);
+    color: white;
+    overflow: hidden; 
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    padding: 20px; 
+    box-sizing: border-box;
+}
+
+.spacer {
+    flex-grow: 300; 
+}
+
+.container {
+    max-height: 80vh;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background: rgba(5, 3, 100, 0.429);
+    border-radius: 10px;
+    box-sizing: border-box; 
+    box-shadow: 0 8px 30px rgba(255, 51, 0, 0.657);
+    text-align: center;
+    margin: 80px auto 0 auto;
+}
+
 a:visited {
     color: pink;
     background-color: transparent;
     text-decoration: none;
-  }
+}
 
-.container {
-    text-align: center;
-    border: 1px solid #2f0747;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff;
+/* Form Elements */
+input[type="text"], input[type="password"], input[type="file"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+button, .button-submit {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background: #2575fc;
     color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 5px 0; 
+}
+
+button:hover, .button-submit:hover {
+    background: #05a;
 }
 
 .button-container {
@@ -19,47 +76,34 @@ a:visited {
     margin-top: 20px;
 }
 
-.input-container {
-    margin-bottom: 15px;
-}
-
-input[type="text"], input[type="password"] {
-    width: 80%;
+.button-submit {
+    border: none;
     padding: 10px;
-    border: 1px solid #ccc;
     border-radius: 5px;
+    background: #2575fc;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, rgb(85, 4, 161), #2575fc);
-    color: white;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Headings */
+h1, h2 {
+    margin: 10px 0;
+    font-size: 1.5rem;
+}
+
+h4 {
     margin: 0;
     padding: 0;
 }
 
-.container {
-    background: rgba(5, 3, 100, 0.429);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-h4
-{
-    margin: 0px;
-    padding: 0px;
-}
-
+/* Chat Styles */
 .chatheader {
     background-color: rgba(5, 3, 100, 0.429);
     text-align: right;
     border: 1px solid #2f0747;
-    padding: 20px;
+    padding: 500px; 
     border-radius: 10px;
     color: white;
 }
@@ -67,16 +111,16 @@ h4
 .chatcontainerdescription {
     text-align: left;
     background-color: rgba(0, 0, 0, 0.224);
-    padding: 20px;
+    padding: 10px; /* Reduced padding */
     margin: 5px;
-    border-radius: 50px;
+    border-radius: 10px; /* Adjusted border radius */
     color: white;
 }
 
 .chatcontainer {
     text-align: left;
     background: rgba(0, 0, 0, 0.6);
-    padding: 20px;
+    padding: 15px; 
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
@@ -86,51 +130,10 @@ h4
     border: 1px solid rgba(5, 3, 100, 0.429);
     border-radius: 10px;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px; 
 }
 
-h2 {
-    margin: 0;
-    color: #ffffff;
-    outline: #2575fc;
-    outline-width: 5px;
-    text-align: center;
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-button {
-    border: 0px solid rgb(44, 0, 109);
-    outline: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background: #2575fc;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.button-submit {
-    border: 0px;
-    outline: none;
-    padding: 5px;
-    border-radius: 5px;
-    background: #2575fc;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.button:hover {
-    background: #05a;
-}
-
+/* Calendar Styles */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -148,11 +151,12 @@ button {
     border: 1px solid #999;
 }
 
+/* Buttons for Navigation */
 .back-button, .logout-button {
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 10px 20px;
     background-color: #2f0747;
-    border: 1px solid #2f0747;
+    border: none;
     border-radius: 5px;
     color: white;
     cursor: pointer;
@@ -162,39 +166,41 @@ button {
     background-color: #1b0429;
 }
 
+/* Ticket Styles */
 .tickets {
     background-color: #2575fc;
-    border: white;
+    border: none;
     margin: 10px 0;
     padding: 10px;
     border-radius: 10px;
 }
+
 .tickets p {
     margin: 5px 0;
 }
 
 .ticket-container {
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     margin: 50px auto;
     padding: 20px;
     background: rgba(0, 0, 0, 0.6);
-    border: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* view_assigned_tickets.html */
+/* View Assigned Tickets Table Styles */
 .ticket-table {
     border-collapse: separate;
     border-spacing: 0;
-    width: 80%;
+    width: 100%;
     margin: 20px 0;
 }
 
-.ticket-table th{
+.ticket-table th {
     background-color: rgba(30, 27, 27, 0.263);
     color: white;
-    padding: 15px;
+    padding: 10px; /* Adjusted padding for better fit */
     text-align: center;
     border: 1px solid black;
 }
@@ -217,7 +223,8 @@ button {
     background-color: rgba(30, 27, 27, 0.263);
     border: 1px solid black;
     padding: 6px;
-    text-align: left;}
+    text-align: left;
+}
 
 .rounded-body-left {
     border-top-left-radius: 5px;
@@ -232,10 +239,8 @@ button {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
-/* end of view_assigned_tickets.html */
 
-
-
+/* Table Styles */
 .table {
     color: white;
 }

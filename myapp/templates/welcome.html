@@ -61,7 +61,6 @@
         <div class="stars">+</div>
         <div class="stars">+</div>
     </div>
-    <img src="{% static 'TechTicket.png' %}" style="position: relative; z-index: 1;">
 
     <div class="container" style="position: relative; z-index: 1;">
         <div class="header">
@@ -71,6 +70,11 @@
             <button class="btn" onclick="window.location.href='{% url 'login' %}'">Login</button>
             <button class="btn" onclick="window.location.href='{% url 'signup' %}'">Signup</button>
         </div>
+    </div>
+    <br>
+    <br>
+    <div style="text-align: center;">
+        <img src="{% static 'TechTicket.png' %}" style="width: 40%; height: auto;">
     </div>
 </body>
 </html>
