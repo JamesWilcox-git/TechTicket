@@ -23,9 +23,9 @@
     </style>
     <script>
         const roomName = "{{ room_name }}";
-
+        const ipAddress = '{{ ip_address }}';
         const chatSocket = new WebSocket(
-            'ws://192.168.56.1:8000/ws/chat/' + roomName + '/'
+            `ws://${ipAddress}:8000/ws/chat/${roomName}/`
         );
 
         chatSocket.onopen = function(event) {

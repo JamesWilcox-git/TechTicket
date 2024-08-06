@@ -9,8 +9,12 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <script>
         // Establish WebSocket connection
+        const ipAddress = '{{ ip_address }}';  // Ensure this is correctly passed from Django
+        const roomName = '{{ ticket.id }}';  // Ensure this is correctly passed from Django
+
+        // Initialize WebSocket with dynamic IP address
         const chatSocket = new WebSocket(
-            'ws://192.168.56.1:8000/ws/ticket/{{ ticket.id }}/'
+            `ws://${ipAddress}:8000/ws/ticket/${roomName}/`
         );
 
         // Handle incoming WebSocket messages

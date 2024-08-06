@@ -173,7 +173,9 @@ def employee_hours(request):
 # live chat screen
 def chat_room(request, room_name):
     user = request.user
-    return render(request, 'chat.html', {'room_name': room_name, 'user': user})
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    return render(request, 'chat.html', {'room_name': room_name, 'user': user, 'ip_address': ip_address})
 
 # used for auto assignment of tickets to employees
 def get_available_employee():
@@ -250,7 +252,9 @@ def achat_ticket(request, ticket_id):
         return redirect('login') 
     ticket = Ticket.objects.get(id=ticket_id)
     messages = ChatMessage.objects.filter(ticket_id=ticket_id)
-    return render(request, 'achat_ticket.html', {'ticket': ticket, 'current_user': current_user, 'messages': messages})
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    return render(request, 'achat_ticket.html', {'ticket': ticket, 'current_user': current_user, 'messages': messages, 'ip_address': ip_address})
 
 def get_user(username):
     try:
