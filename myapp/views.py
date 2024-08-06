@@ -15,6 +15,7 @@ from .models import CustomUser, Ticket, WorkHour, ChatMessage, TicketNotificatio
 from datetime import datetime
 import json
 import logging
+import socket
 
 logger = logging.getLogger(__name__)
 from django.http import HttpResponse
