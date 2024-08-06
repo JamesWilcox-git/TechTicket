@@ -25,7 +25,7 @@
         const roomName = "{{ room_name }}";
 
         const chatSocket = new WebSocket(
-            'ws://192.168.1.69:8000/ws/chat/' + roomName + '/'
+            'ws://192.168.56.1:8000/ws/chat/' + roomName + '/'
         );
 
         chatSocket.onopen = function(event) {
