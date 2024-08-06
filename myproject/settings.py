@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ei+h@+k4!k0_pqbxv8u%4+n6#jiv)2rb16*y!0o8s@!7v$l7nc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','192.168.0.38','172.27.60.68','*']
+ALLOWED_HOSTS = ['.railway.app', 'localhost']
 
 
 
@@ -88,7 +88,10 @@ TEMPLATES = [
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Use in-memory layer or replace with Redis if preferred
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
     },
 }
 ASGI_APPLICATION = 'myproject.asgi.application'
